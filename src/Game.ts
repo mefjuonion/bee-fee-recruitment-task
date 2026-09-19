@@ -4,6 +4,7 @@ import { GameEvents } from 'src/core/events';
 import InputManager from 'src/managers/InputManager';
 import ScoreItemsManager from 'src/managers/ScoreItemsManager';
 import LevelManager from 'src/managers/LevelManager';
+import SoundManager from 'src/managers/SoundManager';
 import UIManager from 'src/managers/UIManager';
 import Background from 'src/prefabs/Background';
 import Floor from 'src/prefabs/Floor';
@@ -81,6 +82,7 @@ export default class Game {
     this.events.on('scoreChanged', this.handleScoreChanged);
     this.events.on('continueLevel', this.handleContinueLevel);
     new UIManager(this.events);
+    new SoundManager(this.events);
   }
 
   private endGame(): void {

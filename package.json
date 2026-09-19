@@ -24,10 +24,12 @@
     "auto-bind": "^5.0.1",
     "glsl-noise": "^0.0.0",
     "glslify": "^7.1.1",
+    "howler": "^2.2.4",
     "lodash": "^4.18.1",
     "pixi.js": "^8.21.0"
   },
   "devDependencies": {
+    "@types/howler": "^2.2.13",
     "@types/lodash": "^4.17.25",
     "eslint": "^8.57.1",
     "eslint-plugin-import": "^2.32.0",
