@@ -1,10 +1,11 @@
 import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
 import { GameEvents } from 'src/core/events';
-import InputManager from 'src/managers/InputManager';
-import ScoreItemsManager from 'src/managers/ScoreItemsManager';
 import AudioManager from 'src/managers/AudioManager';
+import FocusManager from 'src/managers/FocusManager';
+import InputManager from 'src/managers/InputManager';
 import LevelManager from 'src/managers/LevelManager';
+import ScoreItemsManager from 'src/managers/ScoreItemsManager';
 import UIManager from 'src/managers/UIManager';
 import Background from 'src/prefabs/Background';
 import Floor from 'src/prefabs/Floor';
@@ -14,6 +15,7 @@ import AssetsManager from './managers/AssetsManager';
 export default class Game {
   private readonly events = new PIXI.EventEmitter<GameEvents>();
   private readonly input = new InputManager();
+  private readonly focus = new FocusManager(this.events);
   private readonly levels = new LevelManager();
   private readonly background: Background;
   private readonly player: Player;
@@ -22,6 +24,7 @@ export default class Game {
 
   private isGameOver = false;
   private isPaused = false;
+  private isFocused = true;
 
   constructor(private readonly app: PIXI.Application) {
     autoBind(this);
@@ -68,10 +71,14 @@ export default class Game {
     this.player.resize(this.app.screen);
   }
 
+  private handleWindowFocusChanged(isFocused: boolean): void {
+    this.isFocused = isFocused;
+  }
+
   private readonly update = (ticker: PIXI.Ticker): void => {
     const isReady = AssetsManager.progress >= 1;
 
-    if (this.isGameOver || this.isPaused || !isReady) return;
+    if (this.isGameOver || this.isPaused || !this.isFocused || !isReady) return;
 
     const deltaSeconds = ticker.deltaMS / 1000;
 
@@ -84,6 +91,7 @@ export default class Game {
     this.events.on('gameOver', this.endGame);
     this.events.on('scoreChanged', this.handleScoreChanged);
     this.events.on('continueLevel', this.handleContinueLevel);
+    this.events.on('windowFocusChanged', this.handleWindowFocusChanged);
     new UIManager(this.events);
     new AudioManager(this.events);
   }
@@ -92,5 +100,6 @@ export default class Game {
     this.isGameOver = true;
     this.app.ticker.remove(this.update);
     this.input.destroy();
+    this.focus.destroy();
   }
 }

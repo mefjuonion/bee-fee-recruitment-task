@@ -6,6 +6,7 @@ export interface GameEvents {
     continueLevel: [];
     gameOver: [];
     win: [score: number];
+    windowFocusChanged: [isFocused: boolean];
 }
 
 export interface CollisionEvents {

@@ -1,5 +1,5 @@
 import autoBind from 'auto-bind';
-import { Howl } from 'howler';
+import { Howl, Howler } from 'howler';
 import * as PIXI from 'pixi.js';
 import { GameEvents } from 'src/core/events';
 import AssetsManager, { Sound } from 'src/managers/AssetsManager';
@@ -35,9 +35,14 @@ class AudioManager {
     this.soundLibrary.SOUND_FORREST.stop();
   }
 
+  private handleWindowFocusChanged(isFocused: boolean): void {
+    Howler.mute(!isFocused);
+  }
+
   private registerEventListeners(): void {
     this.events.on('scoreChanged', this.handleScoreChanged);
     this.events.on('gameOver', this.handleGameOver);
+    this.events.on('windowFocusChanged', this.handleWindowFocusChanged);
   }
 }
 
