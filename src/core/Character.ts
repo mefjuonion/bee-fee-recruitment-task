@@ -1,0 +1,94 @@
+import  AutoBind  from 'auto-bind';
+import { clamp } from 'lodash';
+import * as PIXI from 'pixi.js';
+import Entity from 'src/core/Entity';
+import { GameEvents } from 'src/core/events';
+import InputManager from 'src/managers/InputManager';
+import getDirectionFromKeyboard from 'src/utils/getDirectionFromKeyboard';
+
+interface CharacterArgs {
+    events: PIXI.EventEmitter<GameEvents>;
+    screen: PIXI.Rectangle;
+    speed: number;
+    maxLives: number;
+}
+
+export default abstract class Character extends Entity<PIXI.Sprite> {
+  public readonly body!: PIXI.Sprite;
+
+  private _score = 0;
+  private _lives: number;
+  private speed: number;
+  protected directionX = 0;
+
+  constructor(private readonly characterArgs: CharacterArgs) {
+    super();
+    this._lives = characterArgs.maxLives;
+    this.speed = characterArgs.speed;
+    AutoBind(this);
+  }
+
+  public update(deltaSeconds: number, input: InputManager): void {
+    this.directionX = getDirectionFromKeyboard(input).x;
+
+    this.move(deltaSeconds);
+  }
+
+  public setSpeed(speed: number): void {
+    this.speed = speed;
+  }
+
+  public move(deltaSeconds: number): void {
+    const nextX = this.body.x + this.directionX * this.speed * deltaSeconds;
+
+    const halfSize = this.body.width / 2;
+    const { width } = this.characterArgs.screen;
+
+    this.body.x = clamp(nextX, halfSize, width - halfSize);
+  }
+
+  public checkCollision(rectangle: PIXI.Rectangle, score: number): boolean {
+    if (!this.body.getBounds().rectangle.intersects(rectangle)) {
+      return false;
+    }
+
+    this.addScore(score);
+    return true;
+  }
+
+  public loseLife(): void {
+    this._lives = Math.max(0, this._lives - 1);
+    this.characterArgs.events.emit('livesChanged', this._lives);
+
+    if (this._lives === 0) {
+      this.characterArgs.events.emit('gameOver');
+    }
+  }
+
+  public score(): number {
+    return this._score;
+  }
+
+  public lives(): number {
+    return this._lives;
+  }
+
+  public isAlive(): boolean {
+    return this._lives > 0;
+  }
+
+  public show(): Promise<void> {
+    this.body.visible = true;
+    return Promise.resolve();
+  }
+
+  public hide(): Promise<void> {
+    this.body.visible = false;
+    return Promise.resolve();
+  }
+
+  private addScore(points: number): void {
+    this._score += points;
+    this.characterArgs.events.emit('scoreChanged', this._score);
+  }
+}

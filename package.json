@@ -1,0 +1,37 @@
+{
+  "name": "bee-fee-recruitment-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "vite",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "preview": "vite preview",
+    "lint": "eslint src --ext .ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mefjuonion/bee-fee-recruitment-task.git"
+  },
+  "author": "Mati",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mefjuonion/bee-fee-recruitment-task/issues"
+  },
+  "homepage": "https://github.com/mefjuonion/bee-fee-recruitment-task#readme",
+  "dependencies": {
+    "auto-bind": "^5.0.1",
+    "lodash": "^4.18.1",
+    "pixi.js": "^8.21.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.17.25",
+    "eslint": "^8.57.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.0",
+    "vite-tsconfig-paths": "^6.1.1"
+  }
+}
