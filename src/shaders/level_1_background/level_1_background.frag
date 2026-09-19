@@ -1,10 +1,12 @@
-#pragma glslify: fbm = require(../common/fbm.glsl)
+#pragma glslify: patchReveal = require(../common/patchReveal.glsl)
+#pragma glslify: forestShade = require(../common/forestShade.glsl)
 
 in vec2 vLocalPosition;
 
 out vec4 finalColor;
 
 uniform sampler2D uTexture;
+uniform sampler2D uNextTexture;
 
 uniform float uScrollOffset;
 uniform float uFrequency;
@@ -12,22 +14,23 @@ uniform float uTileSize;
 uniform float uTime;
 uniform float uSwaySpeed;
 uniform float uSwayAmount;
-
-// Bottom-left <-> top-right, pre-normalized (screen space: up is -y).
-const vec2 SWAY_AXIS = vec2(0.70710678, -0.70710678);
+uniform float uTransitionProgress;
 
 void main(void) {
     vec2 sampleCoord = vec2(vLocalPosition.x, vLocalPosition.y - uScrollOffset);
 
-    vec2 drift = SWAY_AXIS * sin(uTime * uSwaySpeed) * uSwayAmount;
-
-    float height = fbm((sampleCoord + drift) * uFrequency) * 0.5 + 0.5;
+    float shade = forestShade(sampleCoord, uFrequency, uTime, uSwaySpeed, uSwayAmount);
 
     vec2 uv = sampleCoord / uTileSize;
     vec4 texColor = texture(uTexture, uv);
+    vec4 nextTexColor = texture(uNextTexture, uv);
 
-    float shade = smoothstep(0.25, 0.8, height);
     vec3 shaded = mix(texColor.rgb * 0.7, texColor.rgb * 1.35, shade);
+    vec3 nextShaded = mix(nextTexColor.rgb * 0.7, nextTexColor.rgb * 1.35, shade);
 
-    finalColor = vec4(shaded, texColor.a);
+    float oldAmount = patchReveal(sampleCoord, uFrequency, uTransitionProgress);
+
+    vec3 finalRgb = mix(nextShaded, shaded, oldAmount);
+
+    finalColor = vec4(finalRgb, texColor.a);
 }

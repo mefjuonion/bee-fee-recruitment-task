@@ -1,9 +1,12 @@
+import { TextureAssetKey } from 'src/managers/AssetsManager';
+
 export interface LevelArgs {
     name: string;
     playerSpeed: number;
     spawnFoodInterval: number;
     maxLives: number;
     scoreToAdvance: number;
+    backgroundTexture: TextureAssetKey;
 }
 
 export default class Level {
@@ -27,5 +30,9 @@ export default class Level {
 
   public get scoreToAdvance(): number {
     return this.args.scoreToAdvance;
+  }
+
+  public get backgroundTexture(): TextureAssetKey {
+    return this.args.backgroundTexture;
   }
 }

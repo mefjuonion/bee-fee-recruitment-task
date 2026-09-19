@@ -61,7 +61,7 @@ export default abstract class Character extends Entity<PIXI.Sprite> {
     this.characterArgs.events.emit('livesChanged', this._lives);
 
     if (this._lives === 0) {
-      this.characterArgs.events.emit('gameOver');
+      this.characterArgs.events.emit('gameOver', this._score);
     }
   }
 

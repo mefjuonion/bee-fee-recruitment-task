@@ -12,6 +12,7 @@
             height: 100%;
             overflow: hidden;
             background: #000;
+            font-family: sans-serif;
         }
 
         #app {
@@ -27,7 +28,8 @@
             position: absolute;
             inset: 0;
 
-            color: #fff;
+            display: flex;
+            place-content: center;
         }
 
         .overlay {
@@ -45,6 +47,7 @@
             padding: 24px 32px;
             border-radius: 8px;
             text-align: center;
+            justify-items: center;
         }
 
         .overlay__panel button {
@@ -53,14 +56,51 @@
             font-size: 16px;
             cursor: pointer;
         }
+        
+        .layout > span {
+            background: black;
+            font-size: 30px;
+            color: white;
+            padding: 1% 2%;
+            align-self: flex-end;
+        }
+
+        #lives {
+            background-color: rgba(91, 0, 0, 0.267);
+        }
+
+        #score {
+            background-color: rgba(9, 58, 0, 0.649);
+        }
+
+        .overlay__panel h1 {
+            margin: 0 0 12px;
+            font-size: 26px;
+        }
+
+        .overlay__panel p {
+            margin: 0;
+            max-width: 320px;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
-    <div id="app"></div>
     <div class="layout">
         <span id="score">0</span>
-        <span id="lives">3</span>
-        <span id="level">Poziom 1</span>
+        <span id="lives">10</span>
+        <span class="layout__level" id="level">Poziom 1</span>
+    </div>
+
+    <div id="app"></div>
+
+    <div id="welcome-page" class="overlay" style="display: flex;">
+        <div class="overlay__panel">
+            <h1>Trening zręczności przed poszukiwaniem puszek kaucyjnych.</h1>
+            <h3>Sterowanie strzałkami. Zbieraj jedzenie, lezy gdzie bądź.</h3>
+            <p>By CEO styrtasiepali, Sz.P. Mati</p>
+            <button id="welcome-start-button" type="button">Zagraj</button>
+        </div>
     </div>
     <div id="level-transition" class="overlay">
         <div class="overlay__panel">
@@ -71,6 +111,8 @@
     <div id="game-over" class="overlay">
         <div class="overlay__panel">
             <p>Koniec gry</p>
+            <p style="margin-top: 8px;">Wynik: <strong id="game-over-score">0</strong></p>
+            <button id="game-over-restart" type="button">Zagraj ponownie</button>
         </div>
     </div>
     <script type="module" src="/src/main.ts"></script>

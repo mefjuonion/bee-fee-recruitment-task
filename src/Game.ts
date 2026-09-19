@@ -36,7 +36,7 @@ export default class Game {
       maxLives: this.levels.current.maxLives,
     });
 
-    this.background = new Background(this.app.screen);
+    this.background = new Background(this.app.screen, this.levels.current.backgroundTexture);
     this.floor = new Floor(this.app.screen);
     this.items = new ScoreItemsManager(this.app, this.player, this.floor);
     this.items.setSpawnInterval(this.levels.current.spawnFoodInterval);
@@ -61,6 +61,7 @@ export default class Game {
 
     this.player.setSpeed(this.levels.current.playerSpeed);
     this.items.setSpawnInterval(this.levels.current.spawnFoodInterval);
+    this.background.transitionTo(this.levels.current.backgroundTexture);
     this.isPaused = false;
     this.events.emit('levelChanged', this.levels.current.name);
   }

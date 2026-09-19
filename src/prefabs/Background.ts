@@ -1,8 +1,9 @@
 import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
 import Entity from 'src/core/Entity';
-import AssetsManager from 'src/managers/AssetsManager';
+import AssetsManager, { TextureAssetKey } from 'src/managers/AssetsManager';
 import SettingsManager from 'src/managers/SettingsManager';
+import Transition from 'src/utils/Transition';
 
 import vertexShader from 'src/shaders/level_1_background/level_1_background.vert'
 import fragmentShader from 'src/shaders/level_1_background/level_1_background.frag'
@@ -11,22 +12,32 @@ const TILE_SIZE = 512;
 const NOISE_FREQUENCY = 0.004;
 const SWAY_SPEED = 0.3;
 const SWAY_AMOUNT = 85.0;
+const TRANSITION_DURATION = 3;
 
 function buildQuadPositions(screen: PIXI.Rectangle): Float32Array {
   return new Float32Array([0, 0, screen.width, 0, screen.width, screen.height, 0, screen.height]);
 }
 
+function getTiledTexture(key: TextureAssetKey): PIXI.Texture {
+  const texture = AssetsManager.get(key);
+  texture.source.style.addressMode = 'repeat';
+
+  return texture;
+}
+
 export default class Background extends Entity<PIXI.Mesh<PIXI.MeshGeometry, PIXI.Shader>> {
   public readonly body: PIXI.Mesh<PIXI.MeshGeometry, PIXI.Shader>;
+  private readonly shader: PIXI.Shader;
   private readonly terrainUniforms: PIXI.UniformGroup;
+  private readonly textureTransition: Transition<TextureAssetKey>;
   private scrollOffset = 0;
   private time = 0;
 
-  constructor(screen: PIXI.Rectangle) {
+  constructor(screen: PIXI.Rectangle, initialTextureKey: TextureAssetKey) {
     super();
 
-    const texture = AssetsManager.get('TEXTURE_BACKGROUND_LEVEL_1');
-    texture.source.style.addressMode = 'repeat';
+    this.textureTransition = new Transition(initialTextureKey, TRANSITION_DURATION);
+    const texture = getTiledTexture(initialTextureKey);
 
     this.terrainUniforms = new PIXI.UniformGroup({
       uScrollOffset: { value: 0, type: 'f32' },
@@ -35,20 +46,23 @@ export default class Background extends Entity<PIXI.Mesh<PIXI.MeshGeometry, PIXI
       uTime: { value: 0, type: 'f32' },
       uSwaySpeed: { value: SWAY_SPEED, type: 'f32' },
       uSwayAmount: { value: SWAY_AMOUNT, type: 'f32' },
+      uTransitionProgress: { value: 0, type: 'f32' },
     });
 
-    const shader = PIXI.Shader.from({
+    this.shader = PIXI.Shader.from({
       gl: { vertex: vertexShader, fragment: fragmentShader },
       resources: {
         uTexture: texture.source,
         uSampler: texture.source.style,
+        uNextTexture: texture.source,
+        uNextSampler: texture.source.style,
         terrainUniforms: this.terrainUniforms,
       },
     });
 
     const geometry = new PIXI.MeshGeometry({ positions: buildQuadPositions(screen) });
 
-    this.body = new PIXI.Mesh({ geometry, shader });
+    this.body = new PIXI.Mesh({ geometry, shader: this.shader });
 
     autoBind(this);
   }
@@ -56,11 +70,25 @@ export default class Background extends Entity<PIXI.Mesh<PIXI.MeshGeometry, PIXI
   public show(): Promise<void> | undefined { return; }
   public hide(): Promise<void> | undefined { return; }
 
+  public transitionTo(nextTextureKey: TextureAssetKey): void {
+    if (!this.textureTransition.start(nextTextureKey)) return;
+
+    const nextTexture = getTiledTexture(nextTextureKey);
+    this.shader.resources.uNextTexture = nextTexture.source;
+  }
+
   public update(deltaSeconds: number): void {
     this.scrollOffset += SettingsManager.instance.scoreItemFallSpeed * deltaSeconds;
     this.time += deltaSeconds;
     this.terrainUniforms.uniforms.uScrollOffset = this.scrollOffset;
     this.terrainUniforms.uniforms.uTime = this.time;
+
+    const didComplete = this.textureTransition.update(deltaSeconds);
+    this.terrainUniforms.uniforms.uTransitionProgress = this.textureTransition.progress;
+
+    if (didComplete) {
+      this.shader.resources.uTexture = this.shader.resources.uNextTexture;
+    }
   }
 
   public resize(screen: PIXI.Rectangle): void {

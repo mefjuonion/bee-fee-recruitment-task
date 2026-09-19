@@ -7,7 +7,8 @@ type Asset = PIXI.Texture | PIXI.Spritesheet;
 export const TEXTURE_ASSETS = {
   TEXTURE_PLAYER: '/images/player/texture.json',
   TEXTURE_FOOD: '/images/food.png',
-  TEXTURE_BACKGROUND_LEVEL_1: '/images/backgrounds/level_1/rocky_terrain_02_diff_4k.jpg'
+  TEXTURE_BACKGROUND_LEVEL_1: '/images/backgrounds/level_1/rocky_terrain_02_diff_4k.jpg',
+  TEXTURE_BACKGROUND_LEVEL_2: '/images/backgrounds/level_2/snow_02_diff_1k.jpg'
 };
 
 export const AUDIO_ASSETS = {

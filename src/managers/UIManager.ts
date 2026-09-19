@@ -32,8 +32,13 @@ class UIManager {
     this.events.emit('continueLevel');
   }
 
-  handleGameOver(): void {
+  handleGameOver(score: number): void {
+    UI.gameOverScore().textContent = score.toString();
     UI.gameOver().style.display = 'flex';
+  }
+
+  handleRestartClick(): void {
+    location.reload();
   }
 
   registerEventListeners(): void {
@@ -46,6 +51,7 @@ class UIManager {
 
   registerDomListeners(): void {
     UI.levelTransitionContinue().addEventListener('click', this.handleContinueClick);
+    UI.gameOverRestart().addEventListener('click', this.handleRestartClick);
   }
 }
 
