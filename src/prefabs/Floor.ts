@@ -13,6 +13,7 @@ export default class Floor extends Entity<PIXI.Sprite> {
 
     this.body = new PIXI.Sprite(PIXI.Texture.WHITE);
     this.body.tint = FLOOR_COLOR;
+    this.body.alpha = 0;
     this.body.width = screen.width;
     this.body.height = FLOOR_HEIGHT;
     this.body.x = 0;

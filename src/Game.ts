@@ -5,6 +5,7 @@ import InputManager from 'src/managers/InputManager';
 import ScoreItemsManager from 'src/managers/ScoreItemsManager';
 import LevelManager from 'src/managers/LevelManager';
 import UIManager from 'src/managers/UIManager';
+import Background from 'src/prefabs/Background';
 import Floor from 'src/prefabs/Floor';
 import Player from 'src/prefabs/Player';
 
@@ -12,6 +13,7 @@ export default class Game {
   private readonly events = new PIXI.EventEmitter<GameEvents>();
   private readonly input = new InputManager();
   private readonly levels = new LevelManager();
+  private readonly background: Background;
   private readonly player: Player;
   private readonly floor: Floor;
   private readonly items: ScoreItemsManager;
@@ -29,11 +31,12 @@ export default class Game {
       maxLives: this.levels.current.maxLives,
     });
 
+    this.background = new Background(this.app.screen);
     this.floor = new Floor(this.app.screen);
     this.items = new ScoreItemsManager(this.app, this.player, this.floor);
     this.items.setSpawnInterval(this.levels.current.spawnFoodInterval);
 
-    this.app.stage.addChild(this.floor.body, this.player.body);
+    this.app.stage.addChild(this.background.body, this.floor.body, this.player.body);
 
     this.registerEvents();
 
@@ -58,6 +61,7 @@ export default class Game {
   }
 
   private handleResize(): void {
+    this.background.resize(this.app.screen);
     this.floor.resize(this.app.screen);
     this.player.resize(this.app.screen);
   }
@@ -67,6 +71,7 @@ export default class Game {
 
     const deltaSeconds = ticker.deltaMS / 1000;
 
+    this.background.update(deltaSeconds);
     this.player.update(deltaSeconds, this.input);
     this.items.update(deltaSeconds);
   };

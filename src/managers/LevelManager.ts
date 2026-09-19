@@ -2,8 +2,8 @@ import Level from 'src/core/Level';
 
 const LEVELS: Level[] = [
   new Level({ name: 'Poziom 1', playerSpeed: 420, spawnFoodInterval: 5000, maxLives: 10, scoreToAdvance: 10 }),
-  new Level({ name: 'Poziom 2', playerSpeed: 520, spawnFoodInterval: 3500, maxLives: 10, scoreToAdvance: 30 }),
-  new Level({ name: 'Poziom 3', playerSpeed: 650, spawnFoodInterval: 2500, maxLives: 5, scoreToAdvance: 40 }),
+  new Level({ name: 'Poziom 2', playerSpeed: 200, spawnFoodInterval: 3500, maxLives: 10, scoreToAdvance: 30 }),
+  new Level({ name: 'Poziom 3', playerSpeed: 150, spawnFoodInterval: 2500, maxLives: 5, scoreToAdvance: 40 }),
 ];
 
 class LevelManager {

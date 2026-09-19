@@ -6,7 +6,8 @@ type Asset = PIXI.Texture | PIXI.Spritesheet;
 
 const ASSETS = {
   TEXTURE_PLAYER: '/images/player/texture.json',
-  TEXTURE_FOOD: '/images/food.png'
+  TEXTURE_FOOD: '/images/food.png',
+  TEXTURE_BACKGROUND_LEVEL_1: '/images/backgrounds/level_1/rocky_terrain_02_diff_4k.jpg'
 };
 
 class AssetsManager {
