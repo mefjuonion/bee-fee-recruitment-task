@@ -6,7 +6,6 @@ const SETTINGS = {
   playerAnimationSpeed: 0.15,
 
   scoreLossZoneHeight: 12,
-  scoreLossZoneColor: 0x2c3e50,
 
   backgroundTileSize: 512,
   backgroundNoiseFrequency: 0.004,

@@ -10,7 +10,6 @@ export default class ScoreLossZone extends Entity<PIXI.Sprite> {
     super();
 
     this.body = new PIXI.Sprite(PIXI.Texture.WHITE);
-    this.body.tint = SETTINGS.scoreLossZoneColor;
     this.body.alpha = 0;
     this.body.width = screen.width;
     this.body.height = SETTINGS.scoreLossZoneHeight;
