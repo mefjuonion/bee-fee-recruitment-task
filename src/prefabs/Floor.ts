@@ -21,9 +21,6 @@ export default class Floor extends Entity<PIXI.Sprite> {
 
     autoBind(this);
   }
-    
-  public show(): Promise<void> | undefined { return; }
-  public hide(): Promise<void> | undefined { return; }
 
   public resize(screen: PIXI.Rectangle): void {
     this.body.width = screen.width;

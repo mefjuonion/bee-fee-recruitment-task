@@ -78,16 +78,6 @@ export default abstract class Character extends Entity<PIXI.Sprite> {
     return this._lives > 0;
   }
 
-  public show(): Promise<void> {
-    this.body.visible = true;
-    return Promise.resolve();
-  }
-
-  public hide(): Promise<void> {
-    this.body.visible = false;
-    return Promise.resolve();
-  }
-
   private addScore(points: number): void {
     this._score += points;
     this.characterArgs.events.emit('scoreChanged', this._score);

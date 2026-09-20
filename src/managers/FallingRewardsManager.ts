@@ -32,7 +32,7 @@ class FallingRewardsManager {
 
       if (this.player.checkCollision(item, item.score)) {
         this.explode(item.body.x, item.body.y);
-        item.hide().then(() => this.removeItem(item));
+        this.removeItem(item);
       } else if (this.floor.intersects(item)) {
         this.player.loseLife();
         this.removeItem(item);

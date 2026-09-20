@@ -66,9 +66,6 @@ export default class Background extends Entity<PIXI.Mesh<PIXI.MeshGeometry, PIXI
     autoBind(this);
   }
 
-  public show(): Promise<void> | undefined { return; }
-  public hide(): Promise<void> | undefined { return; }
-
   public transitionTo(nextTextureKey: TextureAssetKey): void {
     if (!this.textureTransition.start(nextTextureKey)) return;
 
