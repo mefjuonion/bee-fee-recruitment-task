@@ -7,12 +7,6 @@ import fragmentShader from 'src/shaders/level_1_background/level_1_background.fr
 import vertexShader from 'src/shaders/level_1_background/level_1_background.vert';
 import Transition from 'src/utils/Transition';
 
-const TILE_SIZE = 512;
-const NOISE_FREQUENCY = 0.004;
-const SWAY_SPEED = 0.3;
-const SWAY_AMOUNT = 85.0;
-const TRANSITION_DURATION = 3;
-
 function buildQuadPositions(screen: PIXI.Rectangle): Float32Array {
   return new Float32Array([0, 0, screen.width, 0, screen.width, screen.height, 0, screen.height]);
 }
@@ -35,16 +29,16 @@ export default class Background extends Entity<PIXI.Mesh<PIXI.MeshGeometry, PIXI
   constructor(screen: PIXI.Rectangle, initialTextureKey: TextureAssetKey) {
     super();
 
-    this.textureTransition = new Transition(initialTextureKey, TRANSITION_DURATION);
+    this.textureTransition = new Transition(initialTextureKey, SETTINGS.levelTransitionDuration);
     const texture = getTiledTexture(initialTextureKey);
 
     this.terrainUniforms = new PIXI.UniformGroup({
       uScrollOffset: { value: 0, type: 'f32' },
-      uFrequency: { value: NOISE_FREQUENCY, type: 'f32' },
-      uTileSize: { value: TILE_SIZE, type: 'f32' },
+      uFrequency: { value: SETTINGS.backgroundNoiseFrequency, type: 'f32' },
+      uTileSize: { value: SETTINGS.backgroundTileSize, type: 'f32' },
       uTime: { value: 0, type: 'f32' },
-      uSwaySpeed: { value: SWAY_SPEED, type: 'f32' },
-      uSwayAmount: { value: SWAY_AMOUNT, type: 'f32' },
+      uSwaySpeed: { value: SETTINGS.backgroundSwaySpeed, type: 'f32' },
+      uSwayAmount: { value: SETTINGS.backgroundSwayAmount, type: 'f32' },
       uTransitionProgress: { value: 0, type: 'f32' },
     });
 

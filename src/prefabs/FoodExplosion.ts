@@ -1,13 +1,7 @@
 import autoBind from 'auto-bind';
 import { sample } from 'lodash';
 import * as PIXI from 'pixi.js';
-
-const PARTICLE_COUNT = 40;
-const PARTICLE_SIZE = 3;
-const MIN_SPEED = 80;
-const MAX_SPEED = 220;
-const DURATION = 0.5;
-const COLORS = [0xffe066, 0xff922b, 0xffffff, 0xff6b6b];
+import SETTINGS from 'src/SETTINGS';
 
 export default class FoodExplosion {
   public readonly body: PIXI.ParticleContainer;
@@ -17,7 +11,7 @@ export default class FoodExplosion {
 
   constructor(x: number, y: number) {
     const texture = PIXI.Texture.WHITE;
-    const radius = MAX_SPEED * DURATION;
+    const radius = SETTINGS.explosionMaxSpeed * SETTINGS.explosionDuration;
 
     this.body = new PIXI.ParticleContainer({
       texture,
@@ -25,9 +19,10 @@ export default class FoodExplosion {
       dynamicProperties: { position: true, color: true },
     });
 
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
+    for (let i = 0; i < SETTINGS.explosionParticleCount; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const speed = MIN_SPEED + Math.random() * (MAX_SPEED - MIN_SPEED);
+      const speed = SETTINGS.explosionMinSpeed
+        + Math.random() * (SETTINGS.explosionMaxSpeed - SETTINGS.explosionMinSpeed);
       this.velocities.push(new PIXI.Point(Math.cos(angle) * speed, Math.sin(angle) * speed));
 
       const particle = new PIXI.Particle({
@@ -36,9 +31,9 @@ export default class FoodExplosion {
         y,
         anchorX: 0.5,
         anchorY: 0.5,
-        scaleX: PARTICLE_SIZE / texture.width,
-        scaleY: PARTICLE_SIZE / texture.height,
-        tint: sample(COLORS),
+        scaleX: SETTINGS.explosionParticleSize / texture.width,
+        scaleY: SETTINGS.explosionParticleSize / texture.height,
+        tint: sample(SETTINGS.explosionColors),
       });
 
       this.particles.push(particle);
@@ -49,12 +44,12 @@ export default class FoodExplosion {
   }
 
   public get isFinished(): boolean {
-    return this.elapsed >= DURATION;
+    return this.elapsed >= SETTINGS.explosionDuration;
   }
 
   public update(deltaSeconds: number): void {
     this.elapsed += deltaSeconds;
-    const fade = Math.max(0, 1 - this.elapsed / DURATION);
+    const fade = Math.max(0, 1 - this.elapsed / SETTINGS.explosionDuration);
 
     this.particles.forEach((particle, index) => {
       particle.x += this.velocities[index].x * deltaSeconds;

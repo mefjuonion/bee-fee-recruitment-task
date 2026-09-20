@@ -3,8 +3,7 @@ import { Howl, Howler } from 'howler';
 import * as PIXI from 'pixi.js';
 import { GameEvents } from 'src/core/events';
 import AssetsManager, { Sound } from 'src/managers/AssetsManager';
-
-const BACKGROUND_MUSIC_VOLUME = 0.4;
+import SETTINGS from 'src/SETTINGS';
 
 class AudioManager {
   private readonly soundLibrary: Record<Sound, Howl> = {
@@ -16,7 +15,7 @@ class AudioManager {
       src: [AssetsManager.getAudioUrl('SOUND_FORREST')],
       format: ['wav'],
       loop: true,
-      volume: BACKGROUND_MUSIC_VOLUME,
+      volume: SETTINGS.backgroundMusicVolume,
     })
   };
 

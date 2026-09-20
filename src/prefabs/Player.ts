@@ -18,8 +18,6 @@ export type PlayerBehavior =
     'slice_right' |
     'slice_up'
 
-const ANIMATION_SPEED = 0.15;
-
 class Player extends Character {
   declare public readonly body: PIXI.AnimatedSprite;
   private readonly sheet: PIXI.Spritesheet;
@@ -32,7 +30,7 @@ class Player extends Character {
     const sheet = AssetsManager.getSpritesheet('TEXTURE_PLAYER');
 
     const body = new PIXI.AnimatedSprite(sheet.animations.idle);
-    body.animationSpeed = ANIMATION_SPEED;
+    body.animationSpeed = SETTINGS.playerAnimationSpeed;
     body.play();
     body.width = size;
     body.height = size;
