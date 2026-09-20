@@ -2,11 +2,10 @@ import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
 import Entity from 'src/core/Entity';
 import AssetsManager, { TextureAssetKey } from 'src/managers/AssetsManager';
-import SettingsManager from 'src/managers/SettingsManager';
+import SETTINGS from 'src/SETTINGS';
+import fragmentShader from 'src/shaders/level_1_background/level_1_background.frag';
+import vertexShader from 'src/shaders/level_1_background/level_1_background.vert';
 import Transition from 'src/utils/Transition';
-
-import vertexShader from 'src/shaders/level_1_background/level_1_background.vert'
-import fragmentShader from 'src/shaders/level_1_background/level_1_background.frag'
 
 const TILE_SIZE = 512;
 const NOISE_FREQUENCY = 0.004;
@@ -78,7 +77,7 @@ export default class Background extends Entity<PIXI.Mesh<PIXI.MeshGeometry, PIXI
   }
 
   public update(deltaSeconds: number): void {
-    this.scrollOffset += SettingsManager.instance.scoreItemFallSpeed * deltaSeconds;
+    this.scrollOffset += SETTINGS.scoreItemFallSpeed * deltaSeconds;
     this.time += deltaSeconds;
     this.terrainUniforms.uniforms.uScrollOffset = this.scrollOffset;
     this.terrainUniforms.uniforms.uTime = this.time;

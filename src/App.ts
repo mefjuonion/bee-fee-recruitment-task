@@ -1,14 +1,14 @@
 import * as PIXI from 'pixi.js';
 import Game from 'src/Game';
 import AssetsManager from 'src/managers/AssetsManager';
-import SettingsManager from 'src/managers/SettingsManager';
+import SETTINGS from 'src/SETTINGS';
 
 async function App(whenStarted: Promise<void>): Promise<void> {
   const app = new PIXI.Application();
 
   await app.init({
     resizeTo: window,
-    background: SettingsManager.instance.backgroundColor,
+    background: SETTINGS.backgroundColor,
     antialias: true,
     preference: 'webgl',
   });

@@ -10,38 +10,38 @@ class UIManager {
     this.registerDomListeners();
   }
 
-  handleScoreChanged(score: number): void {
+  private handleScoreChanged(score: number): void {
     UI.score().textContent = score.toString();
   }
 
-  handleLivesChanged(lives: number): void {
+  private handleLivesChanged(lives: number): void {
     UI.lives().textContent = lives.toString();
   }
 
-  handleLevelChanged(levelName: string): void {
+  private handleLevelChanged(levelName: string): void {
     UI.level().textContent = levelName;
   }
 
-  handleLevelComplete(levelName: string): void {
+  private handleLevelComplete(levelName: string): void {
     UI.levelTransitionMessage().textContent = `${levelName} zaliczony! Przejść dalej?`;
     UI.levelTransition().style.display = 'flex';
   }
 
-  handleContinueClick(): void {
+  private handleContinueClick(): void {
     UI.levelTransition().style.display = 'none';
     this.events.emit('continueLevel');
   }
 
-  handleGameOver(score: number): void {
+  private handleGameOver(score: number): void {
     UI.gameOverScore().textContent = score.toString();
     UI.gameOver().style.display = 'flex';
   }
 
-  handleRestartClick(): void {
+  private handleRestartClick(): void {
     location.reload();
   }
 
-  registerEventListeners(): void {
+  private registerEventListeners(): void {
     this.events.on('scoreChanged', this.handleScoreChanged);
     this.events.on('livesChanged', this.handleLivesChanged);
     this.events.on('levelChanged', this.handleLevelChanged);
@@ -49,7 +49,7 @@ class UIManager {
     this.events.on('gameOver', this.handleGameOver);
   }
 
-  registerDomListeners(): void {
+  private registerDomListeners(): void {
     UI.levelTransitionContinue().addEventListener('click', this.handleContinueClick);
     UI.gameOverRestart().addEventListener('click', this.handleRestartClick);
   }

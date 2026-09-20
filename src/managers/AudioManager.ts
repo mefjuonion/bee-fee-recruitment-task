@@ -18,7 +18,7 @@ class AudioManager {
       loop: true,
       volume: BACKGROUND_MUSIC_VOLUME,
     })
-  }
+  };
 
   constructor(private readonly events: PIXI.EventEmitter<GameEvents>) {
     autoBind(this);

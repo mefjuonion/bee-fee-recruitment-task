@@ -1,10 +1,10 @@
 import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
-import SettingsManager from 'src/managers/SettingsManager';
+import SETTINGS from 'src/SETTINGS';
 
 import Entity from './Entity';
 
-export default class ScoreItem extends Entity<PIXI.Sprite> {
+export default class FallingReward extends Entity<PIXI.Sprite> {
   constructor(
         public readonly body: PIXI.Sprite,
         public readonly score: number
@@ -14,7 +14,7 @@ export default class ScoreItem extends Entity<PIXI.Sprite> {
   }
 
   public update(deltaSeconds: number): void {
-    this.body.y += SettingsManager.instance.scoreItemFallSpeed * deltaSeconds;
+    this.body.y += SETTINGS.scoreItemFallSpeed * deltaSeconds;
   }
 
   public show(): Promise<void> {

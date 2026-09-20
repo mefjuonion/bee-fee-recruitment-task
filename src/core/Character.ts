@@ -6,7 +6,7 @@ import { GameEvents } from 'src/core/events';
 import InputManager from 'src/managers/InputManager';
 import getDirectionFromKeyboard from 'src/utils/getDirectionFromKeyboard';
 
-interface CharacterArgs {
+export interface CharacterArgs {
     events: PIXI.EventEmitter<GameEvents>;
     screen: PIXI.Rectangle;
     speed: number;
@@ -14,14 +14,15 @@ interface CharacterArgs {
 }
 
 export default abstract class Character extends Entity<PIXI.Sprite> {
-  public readonly body!: PIXI.Sprite;
-
   private _score = 0;
   private _lives: number;
   private speed: number;
   protected directionX = 0;
 
-  constructor(private readonly characterArgs: CharacterArgs) {
+  constructor(
+    private readonly characterArgs: CharacterArgs,
+    public readonly body: PIXI.Sprite
+  ) {
     super();
     this._lives = characterArgs.maxLives;
     this.speed = characterArgs.speed;
@@ -47,8 +48,8 @@ export default abstract class Character extends Entity<PIXI.Sprite> {
     this.body.x = clamp(nextX, halfSize, width - halfSize);
   }
 
-  public checkCollision(rectangle: PIXI.Rectangle, score: number): boolean {
-    if (!this.body.getBounds().rectangle.intersects(rectangle)) {
+  public checkCollision(item: Entity<PIXI.Container>, score: number): boolean {
+    if (!this.intersects(item)) {
       return false;
     }
 

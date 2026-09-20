@@ -1,16 +1,16 @@
 import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
 import { GameEvents } from 'src/core/events';
+import AssetsManager from 'src/managers/AssetsManager';
 import AudioManager from 'src/managers/AudioManager';
+import FallingRewardsManager from 'src/managers/FallingRewardsManager';
 import FocusManager from 'src/managers/FocusManager';
 import InputManager from 'src/managers/InputManager';
 import LevelManager from 'src/managers/LevelManager';
-import ScoreItemsManager from 'src/managers/ScoreItemsManager';
 import UIManager from 'src/managers/UIManager';
 import Background from 'src/prefabs/Background';
 import Floor from 'src/prefabs/Floor';
 import Player from 'src/prefabs/Player';
-import AssetsManager from './managers/AssetsManager';
 
 export default class Game {
   private readonly events = new PIXI.EventEmitter<GameEvents>();
@@ -20,7 +20,7 @@ export default class Game {
   private readonly background: Background;
   private readonly player: Player;
   private readonly floor: Floor;
-  private readonly items: ScoreItemsManager;
+  private readonly items: FallingRewardsManager;
 
   private isGameOver = false;
   private isPaused = false;
@@ -38,7 +38,7 @@ export default class Game {
 
     this.background = new Background(this.app.screen, this.levels.current.backgroundTexture);
     this.floor = new Floor(this.app.screen);
-    this.items = new ScoreItemsManager(this.app, this.player, this.floor);
+    this.items = new FallingRewardsManager(this.app, this.player, this.floor);
     this.items.setSpawnInterval(this.levels.current.spawnFoodInterval);
 
     this.app.stage.addChild(this.background.body, this.floor.body, this.player.body);

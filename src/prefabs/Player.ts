@@ -1,10 +1,10 @@
 import autoBind from 'auto-bind';
 import { clamp } from 'lodash';
 import * as PIXI from 'pixi.js';
-import  Character from 'src/core/Character';
+import Character, { CharacterArgs } from 'src/core/Character';
 import AssetsManager from 'src/managers/AssetsManager';
 import InputManager from 'src/managers/InputManager';
-import SettingsManager from 'src/managers/SettingsManager';
+import SETTINGS from 'src/SETTINGS';
 import getRelativeSize from 'src/utils/getRelativeSize';
 
 export type PlayerBehavior =
@@ -21,26 +21,28 @@ export type PlayerBehavior =
 const ANIMATION_SPEED = 0.15;
 
 class Player extends Character {
-  public readonly body: PIXI.AnimatedSprite;
+  declare public readonly body: PIXI.AnimatedSprite;
   private readonly sheet: PIXI.Spritesheet;
 
   private playerBehavior: PlayerBehavior = 'idle';
 
-  constructor(...args: ConstructorParameters<typeof Character>) {
-    super(...args);
+  constructor(args: CharacterArgs) {
+    const { screen } = args;
+    const size = getRelativeSize(screen, SETTINGS.playerSizeRatio);
+    const sheet = AssetsManager.getSpritesheet('TEXTURE_PLAYER');
 
-    const [{ screen }] = args;
-    const size = getRelativeSize(screen, SettingsManager.instance.playerSizeRatio);
+    const body = new PIXI.AnimatedSprite(sheet.animations.idle);
+    body.animationSpeed = ANIMATION_SPEED;
+    body.play();
+    body.width = size;
+    body.height = size;
+    body.anchor.set(0.5);
+    body.x = screen.width / 2;
+    body.y = screen.height - size;
 
-    this.sheet = AssetsManager.getSpritesheet('TEXTURE_PLAYER');
-    this.body = new PIXI.AnimatedSprite(this.sheet.animations.idle);
-    this.body.animationSpeed = ANIMATION_SPEED;
-    this.body.play();
-    this.body.width = size;
-    this.body.height = size;
-    this.body.anchor.set(0.5);
-    this.body.x = screen.width / 2;
-    this.body.y = screen.height - size;
+    super(args, body);
+
+    this.sheet = sheet;
 
     autoBind(this);
   }
@@ -64,7 +66,7 @@ class Player extends Character {
   }
 
   public resize(screen: PIXI.Rectangle): void {
-    const size = getRelativeSize(screen, SettingsManager.instance.playerSizeRatio);
+    const size = getRelativeSize(screen, SETTINGS.playerSizeRatio);
 
     this.body.width = size;
     this.body.height = size;
