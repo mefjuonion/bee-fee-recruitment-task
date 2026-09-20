@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Bee-fee recruitment task.</title>
     <style>
+        html {
+            font-size: calc(100vw / 100);
+        }
+
         html, body {
             margin: 0;
             padding: 0;
@@ -54,13 +58,13 @@
         .overlay__panel button {
             margin-top: 12px;
             padding: 8px 20px;
-            font-size: 16px;
+            font-size: clamp(12px, 1rem, 22px);
             cursor: pointer;
         }
-        
+
         .layout > span {
             background: black;
-            font-size: 30px;
+            font-size: clamp(18px, 1.875rem, 42px);
             color: white;
             padding: 1% 2%;
             align-self: flex-end;
@@ -72,13 +76,18 @@
 
         .overlay__panel h1 {
             margin: 0 0 12px;
-            font-size: 26px;
+            font-size: clamp(18px, 1.625rem, 34px);
+        }
+
+        .overlay__panel h3 {
+            font-size: clamp(14px, 1rem, 20px);
         }
 
         .overlay__panel p {
             margin: 0;
             max-width: 320px;
             line-height: 1.4;
+            font-size: clamp(12px, 1rem, 22px);
         }
     </style>
 </head>
@@ -98,12 +107,14 @@
             <button id="welcome-start-button" type="button">Zagraj</button>
         </div>
     </div>
+
     <div id="level-transition" class="overlay">
         <div class="overlay__panel">
             <p id="level-transition-message"></p>
             <button id="level-transition-continue" type="button">Dalej</button>
         </div>
     </div>
+
     <div id="game-over" class="overlay">
         <div class="overlay__panel">
             <p>Koniec gry</p>
@@ -111,6 +122,7 @@
             <button id="game-over-restart" type="button">Zagraj ponownie</button>
         </div>
     </div>
+
     <div id="game-won" class="overlay">
         <div class="overlay__panel">
             <p>Wygrałeś!</p>
