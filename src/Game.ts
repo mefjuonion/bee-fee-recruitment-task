@@ -41,7 +41,7 @@ export default class Game {
     this.background = new Background(this.app.screen, this.levels.current.backgroundTexture);
     this.scoreLossZone = new ScoreLossZone(this.app.screen);
     this.items = new FallingRewardsManager(this.app, this.player, this.scoreLossZone);
-    this.items.setSpawnInterval(this.levels.current.spawnFoodInterval);
+    this.items.spawnInterval = this.levels.current.spawnFoodInterval;
 
     this.app.stage.addChild(this.background.body, this.scoreLossZone.body, this.player.body);
     this.app.stage.filters = [this.damageFlash.filter];
@@ -71,8 +71,8 @@ export default class Game {
   private handleContinueLevel(): void {
     this.levels.advance();
 
-    this.player.setSpeed(this.levels.current.playerSpeed);
-    this.items.setSpawnInterval(this.levels.current.spawnFoodInterval);
+    this.player.speed = this.levels.current.playerSpeed;
+    this.items.spawnInterval = this.levels.current.spawnFoodInterval;
     this.background.transitionTo(this.levels.current.backgroundTexture);
     this.isPaused = false;
     this.events.emit('levelChanged', this.levels.current.name);

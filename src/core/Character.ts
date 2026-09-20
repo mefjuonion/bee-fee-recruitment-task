@@ -15,7 +15,7 @@ export interface CharacterArgs {
 
 export default abstract class Character extends Entity<PIXI.Sprite> {
   private _score: number;
-  private speed: number;
+  private _speed: number;
   protected directionX = 0;
 
   constructor(
@@ -23,7 +23,7 @@ export default abstract class Character extends Entity<PIXI.Sprite> {
     public readonly body: PIXI.Sprite
   ) {
     super();
-    this.speed = characterArgs.speed;
+    this._speed = characterArgs.speed;
     this._score = characterArgs.startingScore;
     AutoBind(this);
   }
@@ -43,18 +43,18 @@ export default abstract class Character extends Entity<PIXI.Sprite> {
     }
   }
 
+  public set speed(value: number) {
+    this._speed = value;
+  }
+
   public update(deltaSeconds: number, input: InputManager): void {
     this.directionX = getDirectionFromKeyboard(input).x;
 
     this.move(deltaSeconds);
   }
 
-  public setSpeed(speed: number): void {
-    this.speed = speed;
-  }
-
   public move(deltaSeconds: number): void {
-    const nextX = this.body.x + this.directionX * this.speed * deltaSeconds;
+    const nextX = this.body.x + this.directionX * this._speed * deltaSeconds;
 
     const halfSize = this.body.width / 2;
     const { width } = this.characterArgs.screen;

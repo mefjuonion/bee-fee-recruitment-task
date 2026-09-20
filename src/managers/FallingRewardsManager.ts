@@ -20,7 +20,7 @@ class FallingRewardsManager {
     autoBind(this);
   }
 
-  public setSpawnInterval(intervalMs: number): void {
+  public set spawnInterval(intervalMs: number) {
     this.spawnItem = throttle(() => this.addItem(new Food(this.app.screen)), intervalMs);
   }
 
