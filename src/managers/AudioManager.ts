@@ -20,6 +20,10 @@ class AudioManager {
     SOUND_ERROR: new Howl({
       src: [AssetsManager.getAudioUrl('SOUND_ERROR')],
       format: ['mp3'],
+    }),
+    SOUND_APPLAUSE: new Howl({
+      src: [AssetsManager.getAudioUrl('SOUND_APPLAUSE')],
+      format: ['mp3'],
     })
   };
 
@@ -42,6 +46,10 @@ class AudioManager {
     this.soundLibrary.SOUND_ERROR.play();
   }
 
+  private handleLevelComplete(): void {
+    this.soundLibrary.SOUND_APPLAUSE.play();
+  }
+
   private handleWindowFocusChanged(isFocused: boolean): void {
     Howler.mute(!isFocused);
   }
@@ -50,6 +58,7 @@ class AudioManager {
     this.events.on('scoreChanged', this.handleScoreChanged);
     this.events.on('gameOver', this.handleGameOver);
     this.events.on('livesChanged', this.handleLivesChanged);
+    this.events.on('levelComplete', this.handleLevelComplete);
     this.events.on('windowFocusChanged', this.handleWindowFocusChanged);
   }
 }
