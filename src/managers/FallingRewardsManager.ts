@@ -34,7 +34,7 @@ class FallingRewardsManager {
         this.explode(item.body.x, item.body.y);
         this.removeItem(item);
       } else if (this.scoreLossZone.intersects(item)) {
-        this.player.loseScore();
+        this.player.score -= 1;
         this.removeItem(item);
       }
     }

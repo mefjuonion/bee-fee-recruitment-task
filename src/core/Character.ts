@@ -14,7 +14,7 @@ export interface CharacterArgs {
 }
 
 export default abstract class Character extends Entity<PIXI.Sprite> {
-  private score: number;
+  private _score: number;
   private speed: number;
   protected directionX = 0;
 
@@ -24,8 +24,23 @@ export default abstract class Character extends Entity<PIXI.Sprite> {
   ) {
     super();
     this.speed = characterArgs.speed;
-    this.score = characterArgs.startingScore;
+    this._score = characterArgs.startingScore;
     AutoBind(this);
+  }
+
+  public get score(): number {
+    return this._score;
+  }
+
+  public set score(value: number) {
+    const previousScore = this._score;
+
+    this._score = clamp(value, 0, Infinity);
+    this.characterArgs.events.emit('scoreChanged', { previous: previousScore, current: this._score });
+
+    if (!this.isAlive()) {
+      this.characterArgs.events.emit('gameOver');
+    }
   }
 
   public update(deltaSeconds: number, input: InputManager): void {
@@ -52,26 +67,11 @@ export default abstract class Character extends Entity<PIXI.Sprite> {
       return false;
     }
 
-    this.addScore(scoreValue);
+    this.score += scoreValue;
     return true;
   }
 
-  public loseScore(): void {
-    this.addScore(-1);
-
-    if (!this.isAlive()) {
-      this.characterArgs.events.emit('gameOver');
-    }
-  }
-
   public isAlive(): boolean {
-    return this.score > 0;
-  }
-
-  private addScore(amount: number): void {
-    const previousScore = this.score;
-
-    this.score = clamp(this.score + amount, 0, Infinity);
-    this.characterArgs.events.emit('scoreChanged', { previous: previousScore, current: this.score });
+    return this._score > 0;
   }
 }
