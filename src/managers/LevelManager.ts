@@ -2,11 +2,11 @@ import Level from 'src/core/Level';
 
 const LEVELS: Level[] = [
   new Level({
-    name: 'Poziom 1', playerSpeed: 420, spawnFoodInterval: 5000, maxLives: 10, scoreToAdvance: 10,
+    name: 'Poziom 1', playerSpeed: 420, spawnFoodInterval: 5000, startingScore: 10, scoreToAdvance: 10,
     backgroundTexture: 'TEXTURE_BACKGROUND_LEVEL_1',
   }),
   new Level({
-    name: 'Poziom 2', playerSpeed: 200, spawnFoodInterval: 3500, maxLives: 10, scoreToAdvance: 30,
+    name: 'Poziom 2', playerSpeed: 200, spawnFoodInterval: 3500, startingScore: 10, scoreToAdvance: 30,
     backgroundTexture: 'TEXTURE_BACKGROUND_LEVEL_2',
   }),
 ];

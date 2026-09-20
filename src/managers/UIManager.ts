@@ -1,6 +1,6 @@
 import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
-import { GameEvents } from 'src/core/events';
+import { GameEvents, ScoreChange } from 'src/core/events';
 import UI from 'src/utils/UI';
 
 class UIManager {
@@ -10,12 +10,8 @@ class UIManager {
     this.registerDomListeners();
   }
 
-  private handleScoreChanged(score: number): void {
-    UI.score().textContent = score.toString();
-  }
-
-  private handleLivesChanged(lives: number): void {
-    UI.lives().textContent = lives.toString();
+  private handleScoreChanged(change: ScoreChange): void {
+    UI.score().textContent = change.current.toString();
   }
 
   private handleLevelChanged(levelName: string): void {
@@ -32,8 +28,8 @@ class UIManager {
     this.events.emit('continueLevel');
   }
 
-  private handleGameOver(score: number): void {
-    UI.gameOverScore().textContent = score.toString();
+  private handleGameOver(): void {
+    UI.gameOverLevel().textContent = UI.level().textContent;
     UI.gameOver().style.display = 'flex';
   }
 
@@ -43,7 +39,6 @@ class UIManager {
 
   private registerEventListeners(): void {
     this.events.on('scoreChanged', this.handleScoreChanged);
-    this.events.on('livesChanged', this.handleLivesChanged);
     this.events.on('levelChanged', this.handleLevelChanged);
     this.events.on('levelComplete', this.handleLevelComplete);
     this.events.on('gameOver', this.handleGameOver);

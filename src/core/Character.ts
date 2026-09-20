@@ -10,12 +10,11 @@ export interface CharacterArgs {
     events: PIXI.EventEmitter<GameEvents>;
     screen: PIXI.Rectangle;
     speed: number;
-    maxLives: number;
+    startingScore: number;
 }
 
 export default abstract class Character extends Entity<PIXI.Sprite> {
-  private _score = 0;
-  private _lives: number;
+  private score: number;
   private speed: number;
   protected directionX = 0;
 
@@ -24,8 +23,8 @@ export default abstract class Character extends Entity<PIXI.Sprite> {
     public readonly body: PIXI.Sprite
   ) {
     super();
-    this._lives = characterArgs.maxLives;
     this.speed = characterArgs.speed;
+    this.score = characterArgs.startingScore;
     AutoBind(this);
   }
 
@@ -48,38 +47,31 @@ export default abstract class Character extends Entity<PIXI.Sprite> {
     this.body.x = clamp(nextX, halfSize, width - halfSize);
   }
 
-  public checkCollision(item: Entity<PIXI.Container>, score: number): boolean {
+  public checkCollision(item: Entity<PIXI.Container>, scoreValue: number): boolean {
     if (!this.intersects(item)) {
       return false;
     }
 
-    this.addScore(score);
+    this.addScore(scoreValue);
     return true;
   }
 
-  public loseLife(): void {
-    this._lives = Math.max(0, this._lives - 1);
-    this.characterArgs.events.emit('livesChanged', this._lives);
+  public loseScore(): void {
+    this.addScore(-1);
 
-    if (this._lives === 0) {
-      this.characterArgs.events.emit('gameOver', this._score);
+    if (!this.isAlive()) {
+      this.characterArgs.events.emit('gameOver');
     }
   }
 
-  public score(): number {
-    return this._score;
-  }
-
-  public lives(): number {
-    return this._lives;
-  }
-
   public isAlive(): boolean {
-    return this._lives > 0;
+    return this.score > 0;
   }
 
-  private addScore(points: number): void {
-    this._score += points;
-    this.characterArgs.events.emit('scoreChanged', this._score);
+  private addScore(amount: number): void {
+    const previousScore = this.score;
+
+    this.score = clamp(this.score + amount, 0, Infinity);
+    this.characterArgs.events.emit('scoreChanged', { previous: previousScore, current: this.score });
   }
 }

@@ -1,6 +1,6 @@
 import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
-import { GameEvents } from 'src/core/events';
+import { GameEvents, ScoreChange } from 'src/core/events';
 import AssetsManager from 'src/managers/AssetsManager';
 import AudioManager from 'src/managers/AudioManager';
 import FallingRewardsManager from 'src/managers/FallingRewardsManager';
@@ -10,8 +10,8 @@ import LevelManager from 'src/managers/LevelManager';
 import UIManager from 'src/managers/UIManager';
 import Background from 'src/prefabs/Background';
 import DamageFlash from 'src/prefabs/DamageFlash';
-import LifeLossZone from 'src/prefabs/LifeLossZone';
 import Player from 'src/prefabs/Player';
+import ScoreLossZone from 'src/prefabs/ScoreLossZone';
 
 export default class Game {
   private readonly events = new PIXI.EventEmitter<GameEvents>();
@@ -21,7 +21,7 @@ export default class Game {
   private readonly damageFlash = new DamageFlash();
   private readonly background: Background;
   private readonly player: Player;
-  private readonly lifeLossZone: LifeLossZone;
+  private readonly scoreLossZone: ScoreLossZone;
   private readonly items: FallingRewardsManager;
 
   private isGameOver = false;
@@ -35,15 +35,15 @@ export default class Game {
       events: this.events,
       screen: this.app.screen,
       speed: this.levels.current.playerSpeed,
-      maxLives: this.levels.current.maxLives,
+      startingScore: this.levels.current.startingScore,
     });
 
     this.background = new Background(this.app.screen, this.levels.current.backgroundTexture);
-    this.lifeLossZone = new LifeLossZone(this.app.screen);
-    this.items = new FallingRewardsManager(this.app, this.player, this.lifeLossZone);
+    this.scoreLossZone = new ScoreLossZone(this.app.screen);
+    this.items = new FallingRewardsManager(this.app, this.player, this.scoreLossZone);
     this.items.setSpawnInterval(this.levels.current.spawnFoodInterval);
 
-    this.app.stage.addChild(this.background.body, this.lifeLossZone.body, this.player.body);
+    this.app.stage.addChild(this.background.body, this.scoreLossZone.body, this.player.body);
     this.app.stage.filters = [this.damageFlash.filter];
 
     this.registerEvents();
@@ -52,8 +52,12 @@ export default class Game {
     this.app.renderer.on('resize', this.handleResize);
   }
 
-  private handleScoreChanged(score: number): void {
-    if (this.isPaused || !this.levels.hasNextLevel(score)) return;
+  private handleScoreChanged(change: ScoreChange): void {
+    if (change.current < change.previous) {
+      this.damageFlash.trigger();
+    }
+
+    if (this.isPaused || !this.levels.hasNextLevel(change.current)) return;
 
     this.isPaused = true;
     this.events.emit('levelComplete', this.levels.current.name);
@@ -71,7 +75,7 @@ export default class Game {
 
   private handleResize(): void {
     this.background.resize(this.app.screen);
-    this.lifeLossZone.resize(this.app.screen);
+    this.scoreLossZone.resize(this.app.screen);
     this.player.resize(this.app.screen);
   }
 
@@ -97,7 +101,6 @@ export default class Game {
     this.events.on('scoreChanged', this.handleScoreChanged);
     this.events.on('continueLevel', this.handleContinueLevel);
     this.events.on('windowFocusChanged', this.handleWindowFocusChanged);
-    this.events.on('livesChanged', this.damageFlash.trigger);
     new UIManager(this.events);
     new AudioManager(this.events);
   }

@@ -4,8 +4,8 @@ import * as PIXI from 'pixi.js';
 import FallingReward from 'src/core/FallingReward';
 import Food from 'src/prefabs/Food';
 import FoodExplosion from 'src/prefabs/FoodExplosion';
-import LifeLossZone from 'src/prefabs/LifeLossZone';
 import Player from 'src/prefabs/Player';
+import ScoreLossZone from 'src/prefabs/ScoreLossZone';
 
 class FallingRewardsManager {
   private readonly items: Set<FallingReward> = new Set();
@@ -15,7 +15,7 @@ class FallingRewardsManager {
   constructor(
     private readonly app: PIXI.Application,
     private readonly player: Player,
-    private readonly lifeLossZone: LifeLossZone
+    private readonly scoreLossZone: ScoreLossZone
   ) {
     autoBind(this);
   }
@@ -33,8 +33,8 @@ class FallingRewardsManager {
       if (this.player.checkCollision(item, item.score)) {
         this.explode(item.body.x, item.body.y);
         this.removeItem(item);
-      } else if (this.lifeLossZone.intersects(item)) {
-        this.player.loseLife();
+      } else if (this.scoreLossZone.intersects(item)) {
+        this.player.loseScore();
         this.removeItem(item);
       }
     }

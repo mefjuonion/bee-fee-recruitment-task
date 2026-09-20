@@ -4,7 +4,7 @@ export interface LevelArgs {
     name: string;
     playerSpeed: number;
     spawnFoodInterval: number;
-    maxLives: number;
+    startingScore: number;
     scoreToAdvance: number;
     backgroundTexture: TextureAssetKey;
 }
@@ -24,8 +24,8 @@ export default class Level {
     return this.args.spawnFoodInterval;
   }
 
-  public get maxLives(): number {
-    return this.args.maxLives;
+  public get startingScore(): number {
+    return this.args.startingScore;
   }
 
   public get scoreToAdvance(): number {

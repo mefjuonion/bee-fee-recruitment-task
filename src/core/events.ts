@@ -1,9 +1,13 @@
+export interface ScoreChange {
+    previous: number;
+    current: number;
+}
+
 export interface GameEvents {
-    scoreChanged: [score: number];
-    livesChanged: [lives: number];
+    scoreChanged: [change: ScoreChange];
     levelChanged: [levelName: string];
     levelComplete: [levelName: string];
     continueLevel: [];
-    gameOver: [score: number];
+    gameOver: [];
     windowFocusChanged: [isFocused: boolean];
 }

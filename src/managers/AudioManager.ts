@@ -1,7 +1,7 @@
 import autoBind from 'auto-bind';
 import { Howl, Howler } from 'howler';
 import * as PIXI from 'pixi.js';
-import { GameEvents } from 'src/core/events';
+import { GameEvents, ScoreChange } from 'src/core/events';
 import AssetsManager, { Sound } from 'src/managers/AssetsManager';
 import SETTINGS from 'src/SETTINGS';
 
@@ -34,16 +34,16 @@ class AudioManager {
     this.soundLibrary.SOUND_FORREST.play();
   }
 
-  private handleScoreChanged(): void {
-    this.soundLibrary.SOUND_EATING.play();
+  private handleScoreChanged(change: ScoreChange): void {
+    if (change.current > change.previous) {
+      this.soundLibrary.SOUND_EATING.play();
+    } else if (change.current < change.previous) {
+      this.soundLibrary.SOUND_ERROR.play();
+    }
   }
 
   private handleGameOver(): void {
     this.soundLibrary.SOUND_FORREST.stop();
-  }
-
-  private handleLivesChanged(): void {
-    this.soundLibrary.SOUND_ERROR.play();
   }
 
   private handleLevelComplete(): void {
@@ -57,7 +57,6 @@ class AudioManager {
   private registerEventListeners(): void {
     this.events.on('scoreChanged', this.handleScoreChanged);
     this.events.on('gameOver', this.handleGameOver);
-    this.events.on('livesChanged', this.handleLivesChanged);
     this.events.on('levelComplete', this.handleLevelComplete);
     this.events.on('windowFocusChanged', this.handleWindowFocusChanged);
   }
