@@ -22,7 +22,7 @@ export default class Game {
   private readonly background: Background;
   private readonly player: Player;
   private readonly scoreLossZone: ScoreLossZone;
-  private readonly items: FallingRewardsManager;
+  private readonly fallingRewards: FallingRewardsManager;
 
   private isGameOver = false;
   private isPaused = false;
@@ -40,8 +40,8 @@ export default class Game {
 
     this.background = new Background(this.app.screen, this.levels.current.backgroundTexture);
     this.scoreLossZone = new ScoreLossZone(this.app.screen);
-    this.items = new FallingRewardsManager(this.app, this.player, this.scoreLossZone);
-    this.items.spawnInterval = this.levels.current.spawnFoodInterval;
+    this.fallingRewards = new FallingRewardsManager(this.app, this.player, this.scoreLossZone);
+    this.fallingRewards.spawnInterval = this.levels.current.spawnFoodInterval;
 
     this.app.stage.addChild(this.background.body, this.scoreLossZone.body, this.player.body);
     this.app.stage.filters = [this.damageFlash.filter];
@@ -72,7 +72,7 @@ export default class Game {
     this.levels.advance();
 
     this.player.speed = this.levels.current.playerSpeed;
-    this.items.spawnInterval = this.levels.current.spawnFoodInterval;
+    this.fallingRewards.spawnInterval = this.levels.current.spawnFoodInterval;
     this.background.transitionTo(this.levels.current.backgroundTexture);
     this.isPaused = false;
     this.events.emit('levelChanged', this.levels.current.name);
@@ -82,6 +82,7 @@ export default class Game {
     this.background.resize(this.app.screen);
     this.scoreLossZone.resize(this.app.screen);
     this.player.resize(this.app.screen);
+    this.fallingRewards.resize(this.app.screen);
   }
 
   private handleWindowFocusChanged(isFocused: boolean): void {
@@ -97,7 +98,7 @@ export default class Game {
 
     this.background.update(deltaSeconds);
     this.player.update(deltaSeconds, this.input);
-    this.items.update(deltaSeconds);
+    this.fallingRewards.update(deltaSeconds);
     this.damageFlash.update(deltaSeconds);
   };
 

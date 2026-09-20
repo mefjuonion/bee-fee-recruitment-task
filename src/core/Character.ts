@@ -5,6 +5,7 @@ import Entity from 'src/core/Entity';
 import { GameEvents } from 'src/core/events';
 import InputManager from 'src/managers/InputManager';
 import getDirectionFromKeyboard from 'src/utils/getDirectionFromKeyboard';
+import intersects from 'src/utils/intersects';
 
 export interface CharacterArgs {
     events: PIXI.EventEmitter<GameEvents>;
@@ -13,7 +14,7 @@ export interface CharacterArgs {
     startingScore: number;
 }
 
-export default abstract class Character extends Entity<PIXI.Sprite> {
+export default abstract class Character extends Entity {
   private _score: number;
   private _speed: number;
   protected directionX = 0;
@@ -62,8 +63,8 @@ export default abstract class Character extends Entity<PIXI.Sprite> {
     this.body.x = clamp(nextX, halfSize, width - halfSize);
   }
 
-  public checkCollision(item: Entity<PIXI.Container>, scoreValue: number): boolean {
-    if (!this.intersects(item)) {
+  public checkCollision(item: Entity, scoreValue: number): boolean {
+    if (!intersects(this, item)) {
       return false;
     }
 

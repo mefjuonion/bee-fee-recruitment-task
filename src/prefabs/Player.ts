@@ -2,6 +2,7 @@ import autoBind from 'auto-bind';
 import { clamp } from 'lodash';
 import * as PIXI from 'pixi.js';
 import Character, { CharacterArgs } from 'src/core/Character';
+import Resizable from 'src/core/Resizable';
 import AssetsManager from 'src/managers/AssetsManager';
 import InputManager from 'src/managers/InputManager';
 import SETTINGS from 'src/SETTINGS';
@@ -18,7 +19,7 @@ export type PlayerBehavior =
     'slice_right' |
     'slice_up'
 
-class Player extends Character {
+class Player extends Character implements Resizable {
   declare public readonly body: PIXI.AnimatedSprite;
   private readonly sheet: PIXI.Spritesheet;
 

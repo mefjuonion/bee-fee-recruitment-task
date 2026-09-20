@@ -27,4 +27,11 @@ export default class Food extends FallingReward {
 
     autoBind(this);
   }
+
+  public resize(screen: PIXI.Rectangle): void {
+    const size = getRelativeSize(screen, SETTINGS.itemSizeRatio);
+
+    this.body.width = size;
+    this.body.height = size;
+  }
 }

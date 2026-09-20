@@ -1,6 +1,7 @@
 import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
 import Entity from 'src/core/Entity';
+import Resizable from 'src/core/Resizable';
 import AssetsManager, { TextureAssetKey } from 'src/managers/AssetsManager';
 import SETTINGS from 'src/SETTINGS';
 import fragmentShader from 'src/shaders/level_1_background/level_1_background.frag';
@@ -18,7 +19,7 @@ function getTiledTexture(key: TextureAssetKey): PIXI.Texture {
   return texture;
 }
 
-export default class Background extends Entity<PIXI.Mesh<PIXI.MeshGeometry, PIXI.Shader>> {
+export default class Background extends Entity implements Resizable {
   public readonly body: PIXI.Mesh<PIXI.MeshGeometry, PIXI.Shader>;
   private readonly shader: PIXI.Shader;
   private readonly terrainUniforms: PIXI.UniformGroup;
