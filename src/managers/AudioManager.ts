@@ -46,6 +46,11 @@ class AudioManager {
     this.soundLibrary.SOUND_FORREST.stop();
   }
 
+  private handleGameWon(): void {
+    this.soundLibrary.SOUND_FORREST.stop();
+    this.soundLibrary.SOUND_APPLAUSE.play();
+  }
+
   private handleLevelComplete(): void {
     this.soundLibrary.SOUND_APPLAUSE.play();
   }
@@ -57,6 +62,7 @@ class AudioManager {
   private registerEventListeners(): void {
     this.events.on('scoreChanged', this.handleScoreChanged);
     this.events.on('gameOver', this.handleGameOver);
+    this.events.on('gameWon', this.handleGameWon);
     this.events.on('levelComplete', this.handleLevelComplete);
     this.events.on('windowFocusChanged', this.handleWindowFocusChanged);
   }

@@ -35,9 +35,10 @@
         .overlay {
             position: absolute;
             inset: 0;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
+            visibility: hidden;
             background: rgba(0, 0, 0, 0.6);
         }
 
@@ -89,7 +90,7 @@
 
     <div id="app"></div>
 
-    <div id="welcome-page" class="overlay" style="display: flex;">
+    <div id="welcome-page" class="overlay" style="visibility: visible;">
         <div class="overlay__panel">
             <h1>Trening zręczności przed poszukiwaniem puszek kaucyjnych.</h1>
             <h3>Sterowanie strzałkami. Zbieraj jedzenie, lezy gdzie bądź.</h3>
@@ -108,6 +109,13 @@
             <p>Koniec gry</p>
             <p style="margin-top: 8px;">Osiągnięty poziom: <strong id="game-over-level">Poziom 1</strong></p>
             <button id="game-over-restart" type="button">Zagraj ponownie</button>
+        </div>
+    </div>
+    <div id="game-won" class="overlay">
+        <div class="overlay__panel">
+            <p>Wygrałeś!</p>
+            <p style="margin-top: 8px;">Zdobyte punkty: <strong id="game-won-score">0</strong></p>
+            <button id="game-won-restart" type="button">Zagraj ponownie</button>
         </div>
     </div>
     <script type="module" src="/src/main.ts"></script>

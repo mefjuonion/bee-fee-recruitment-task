@@ -18,10 +18,8 @@ class LevelManager {
     return LEVELS[this.index];
   }
 
-  public hasNextLevel(score: number): boolean {
-    if (this.index >= LEVELS.length - 1) return false;
-
-    return score >= this.current.scoreToAdvance;
+  public get isLastLevel(): boolean {
+    return this.index >= LEVELS.length - 1;
   }
 
   public advance(): void {

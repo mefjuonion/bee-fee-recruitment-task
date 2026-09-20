@@ -9,5 +9,6 @@ export interface GameEvents {
     levelComplete: [levelName: string];
     continueLevel: [];
     gameOver: [];
+    gameWon: [score: number];
     windowFocusChanged: [isFocused: boolean];
 }

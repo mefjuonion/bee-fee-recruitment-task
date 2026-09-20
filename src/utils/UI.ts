@@ -9,6 +9,9 @@ const UI = {
   gameOver: () => document.getElementById('game-over') as HTMLDivElement,
   gameOverLevel: () => document.getElementById('game-over-level') as HTMLElement,
   gameOverRestart: () => document.getElementById('game-over-restart') as HTMLButtonElement,
+  gameWon: () => document.getElementById('game-won') as HTMLDivElement,
+  gameWonScore: () => document.getElementById('game-won-score') as HTMLElement,
+  gameWonRestart: () => document.getElementById('game-won-restart') as HTMLButtonElement,
 };
 
 export default UI;

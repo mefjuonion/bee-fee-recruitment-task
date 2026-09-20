@@ -57,10 +57,15 @@ export default class Game {
       this.damageFlash.trigger();
     }
 
-    if (this.isPaused || !this.levels.hasNextLevel(change.current)) return;
+    if (this.isPaused || change.current < this.levels.current.scoreToAdvance) return;
 
     this.isPaused = true;
-    this.events.emit('levelComplete', this.levels.current.name);
+
+    if (this.levels.isLastLevel) {
+      this.events.emit('gameWon', change.current);
+    } else {
+      this.events.emit('levelComplete', this.levels.current.name);
+    }
   }
 
   private handleContinueLevel(): void {
@@ -98,6 +103,7 @@ export default class Game {
 
   private registerEvents(): void {
     this.events.on('gameOver', this.endGame);
+    this.events.on('gameWon', this.endGame);
     this.events.on('scoreChanged', this.handleScoreChanged);
     this.events.on('continueLevel', this.handleContinueLevel);
     this.events.on('windowFocusChanged', this.handleWindowFocusChanged);
