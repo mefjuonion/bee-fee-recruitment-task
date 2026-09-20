@@ -12,10 +12,10 @@ export const TEXTURE_ASSETS = {
 };
 
 export const AUDIO_ASSETS = {
-  SOUND_EATING: '/images/music/eating.mp3',
-  SOUND_FORREST: '/images/music/forrest.mp3',
-  SOUND_ERROR: '/images/music/error.mp3',
-  SOUND_APPLAUSE: '/images/music/applause.mp3'
+  SOUND_EATING: '/music/eating.mp3',
+  SOUND_FORREST: '/music/forrest.mp3',
+  SOUND_ERROR: '/music/error.mp3',
+  SOUND_APPLAUSE: '/music/applause.mp3'
 };
 export type Sound = keyof typeof AUDIO_ASSETS;
 
