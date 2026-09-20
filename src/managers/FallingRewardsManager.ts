@@ -2,9 +2,9 @@ import autoBind from 'auto-bind';
 import throttle from 'lodash/throttle';
 import * as PIXI from 'pixi.js';
 import FallingReward from 'src/core/FallingReward';
-import Floor from 'src/prefabs/Floor';
 import Food from 'src/prefabs/Food';
 import FoodExplosion from 'src/prefabs/FoodExplosion';
+import LifeLossZone from 'src/prefabs/LifeLossZone';
 import Player from 'src/prefabs/Player';
 
 class FallingRewardsManager {
@@ -15,7 +15,7 @@ class FallingRewardsManager {
   constructor(
     private readonly app: PIXI.Application,
     private readonly player: Player,
-    private readonly floor: Floor
+    private readonly lifeLossZone: LifeLossZone
   ) {
     autoBind(this);
   }
@@ -33,7 +33,7 @@ class FallingRewardsManager {
       if (this.player.checkCollision(item, item.score)) {
         this.explode(item.body.x, item.body.y);
         this.removeItem(item);
-      } else if (this.floor.intersects(item)) {
+      } else if (this.lifeLossZone.intersects(item)) {
         this.player.loseLife();
         this.removeItem(item);
       }

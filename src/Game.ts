@@ -9,7 +9,7 @@ import InputManager from 'src/managers/InputManager';
 import LevelManager from 'src/managers/LevelManager';
 import UIManager from 'src/managers/UIManager';
 import Background from 'src/prefabs/Background';
-import Floor from 'src/prefabs/Floor';
+import LifeLossZone from 'src/prefabs/LifeLossZone';
 import Player from 'src/prefabs/Player';
 
 export default class Game {
@@ -19,7 +19,7 @@ export default class Game {
   private readonly levels = new LevelManager();
   private readonly background: Background;
   private readonly player: Player;
-  private readonly floor: Floor;
+  private readonly lifeLossZone: LifeLossZone;
   private readonly items: FallingRewardsManager;
 
   private isGameOver = false;
@@ -37,11 +37,11 @@ export default class Game {
     });
 
     this.background = new Background(this.app.screen, this.levels.current.backgroundTexture);
-    this.floor = new Floor(this.app.screen);
-    this.items = new FallingRewardsManager(this.app, this.player, this.floor);
+    this.lifeLossZone = new LifeLossZone(this.app.screen);
+    this.items = new FallingRewardsManager(this.app, this.player, this.lifeLossZone);
     this.items.setSpawnInterval(this.levels.current.spawnFoodInterval);
 
-    this.app.stage.addChild(this.background.body, this.floor.body, this.player.body);
+    this.app.stage.addChild(this.background.body, this.lifeLossZone.body, this.player.body);
 
     this.registerEvents();
 
@@ -68,7 +68,7 @@ export default class Game {
 
   private handleResize(): void {
     this.background.resize(this.app.screen);
-    this.floor.resize(this.app.screen);
+    this.lifeLossZone.resize(this.app.screen);
     this.player.resize(this.app.screen);
   }
 

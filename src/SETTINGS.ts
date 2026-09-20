@@ -5,8 +5,8 @@ const SETTINGS = {
   scoreItemFallSpeed: 100,
   playerAnimationSpeed: 0.15,
 
-  floorHeight: 12,
-  floorColor: 0x2c3e50,
+  lifeLossZoneHeight: 12,
+  lifeLossZoneColor: 0x2c3e50,
 
   backgroundTileSize: 512,
   backgroundNoiseFrequency: 0.004,
