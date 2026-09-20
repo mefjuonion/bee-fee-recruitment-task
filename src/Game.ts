@@ -9,6 +9,7 @@ import InputManager from 'src/managers/InputManager';
 import LevelManager from 'src/managers/LevelManager';
 import UIManager from 'src/managers/UIManager';
 import Background from 'src/prefabs/Background';
+import DamageFlash from 'src/prefabs/DamageFlash';
 import LifeLossZone from 'src/prefabs/LifeLossZone';
 import Player from 'src/prefabs/Player';
 
@@ -17,6 +18,7 @@ export default class Game {
   private readonly input = new InputManager();
   private readonly focus = new FocusManager(this.events);
   private readonly levels = new LevelManager();
+  private readonly damageFlash = new DamageFlash();
   private readonly background: Background;
   private readonly player: Player;
   private readonly lifeLossZone: LifeLossZone;
@@ -42,6 +44,7 @@ export default class Game {
     this.items.setSpawnInterval(this.levels.current.spawnFoodInterval);
 
     this.app.stage.addChild(this.background.body, this.lifeLossZone.body, this.player.body);
+    this.app.stage.filters = [this.damageFlash.filter];
 
     this.registerEvents();
 
@@ -86,6 +89,7 @@ export default class Game {
     this.background.update(deltaSeconds);
     this.player.update(deltaSeconds, this.input);
     this.items.update(deltaSeconds);
+    this.damageFlash.update(deltaSeconds);
   };
 
   private registerEvents(): void {
@@ -93,6 +97,7 @@ export default class Game {
     this.events.on('scoreChanged', this.handleScoreChanged);
     this.events.on('continueLevel', this.handleContinueLevel);
     this.events.on('windowFocusChanged', this.handleWindowFocusChanged);
+    this.events.on('livesChanged', this.damageFlash.trigger);
     new UIManager(this.events);
     new AudioManager(this.events);
   }

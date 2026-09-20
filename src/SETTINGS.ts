@@ -22,6 +22,9 @@ const SETTINGS = {
   explosionColors: [0xffe066, 0xff922b, 0xffffff, 0xff6b6b],
 
   backgroundMusicVolume: 0.4,
+
+  damageFlashDuration: 0.4,
+  damageFlashIntensity: 0.5,
 };
 
 export default SETTINGS;
