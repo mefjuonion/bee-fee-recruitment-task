@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js';
 import SETTINGS from 'src/SETTINGS';
 
 import Entity from './Entity';
-import Resizable from './Resizable';
+import { Resizable } from './Resizable';
 
 export default class FallingReward extends Entity implements Resizable {
   constructor(

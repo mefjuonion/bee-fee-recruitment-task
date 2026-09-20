@@ -1,7 +1,5 @@
 import * as PIXI from 'pixi.js';
 
-type Resizable = {
+export interface Resizable {
   resize(screen: PIXI.Rectangle): void;
-};
-
-export default Resizable;
+}

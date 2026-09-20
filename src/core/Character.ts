@@ -1,10 +1,9 @@
 import  AutoBind  from 'auto-bind';
 import { clamp } from 'lodash';
 import * as PIXI from 'pixi.js';
+import { DirectionProvider } from 'src/core/DirectionProvider';
 import Entity from 'src/core/Entity';
 import { GameEvents } from 'src/core/events';
-import InputManager from 'src/managers/InputManager';
-import getDirectionFromKeyboard from 'src/utils/getDirectionFromKeyboard';
 import intersects from 'src/utils/intersects';
 
 export interface CharacterArgs {
@@ -48,8 +47,8 @@ export default abstract class Character extends Entity {
     this._speed = value;
   }
 
-  public update(deltaSeconds: number, input: InputManager): void {
-    this.directionX = getDirectionFromKeyboard(input).x;
+  public update(deltaSeconds: number, input: DirectionProvider): void {
+    this.directionX = input.direction.x;
 
     this.move(deltaSeconds);
   }

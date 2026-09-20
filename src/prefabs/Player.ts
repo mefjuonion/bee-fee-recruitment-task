@@ -2,9 +2,9 @@ import autoBind from 'auto-bind';
 import { clamp } from 'lodash';
 import * as PIXI from 'pixi.js';
 import Character, { CharacterArgs } from 'src/core/Character';
-import Resizable from 'src/core/Resizable';
+import { DirectionProvider } from 'src/core/DirectionProvider';
+import { Resizable } from 'src/core/Resizable';
 import AssetsManager from 'src/managers/AssetsManager';
-import InputManager from 'src/managers/InputManager';
 import SETTINGS from 'src/SETTINGS';
 import getRelativeSize from 'src/utils/getRelativeSize';
 
@@ -46,7 +46,7 @@ class Player extends Character implements Resizable {
     autoBind(this);
   }
 
-  public update(deltaSeconds: number, input: InputManager): void {
+  public update(deltaSeconds: number, input: DirectionProvider): void {
     super.update(deltaSeconds, input);
     
     let expectedAnimation: PlayerBehavior;

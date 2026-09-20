@@ -1,7 +1,7 @@
 import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
 import Entity from 'src/core/Entity';
-import Resizable from 'src/core/Resizable';
+import { Resizable } from 'src/core/Resizable';
 import AssetsManager, { TextureAssetKey } from 'src/managers/AssetsManager';
 import SETTINGS from 'src/SETTINGS';
 import fragmentShader from 'src/shaders/level_1_background/level_1_background.frag';

@@ -1,7 +1,7 @@
 import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
 import Entity from 'src/core/Entity';
-import Resizable from 'src/core/Resizable';
+import { Resizable } from 'src/core/Resizable';
 import SETTINGS from 'src/SETTINGS';
 
 export default class ScoreLossZone extends Entity implements Resizable {
