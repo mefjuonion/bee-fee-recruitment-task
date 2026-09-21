@@ -5,18 +5,18 @@ import FallingReward from 'src/core/FallingReward';
 import AssetsManager from 'src/managers/AssetsManager';
 import SETTINGS from 'src/SETTINGS';
 import ScreenUtils from 'src/utils/ScreenUtils';
-import SpriteSheetUtils from 'src/utils/SpriteSheetUtils';
+import SpriteSheet from 'src/utils/SpriteSheet';
 
 const FOOD_SPRITE_COLUMNS = 8;
 const FOOD_SPRITE_ROWS = 8;
 
 export default class Food extends FallingReward {
-  private static frames: PIXI.Texture[] | null = null;
+  private static _frames: PIXI.Texture[] | null = null;
 
   private screen: PIXI.Rectangle;
 
   constructor(screen: PIXI.Rectangle) {
-    const frame = sample(Food.getFrames())!;
+    const frame = sample(Food.frames)!;
     const size = ScreenUtils.getRelativeSize(screen, SETTINGS.itemSizeRatio);
 
     const body = new PIXI.Sprite(frame);
@@ -49,12 +49,12 @@ export default class Food extends FallingReward {
     this.screen = screen.clone();
   }
 
-  private static getFrames(): PIXI.Texture[] {
-    if (!Food.frames) {
+  private static get frames(): PIXI.Texture[] {
+    if (!Food._frames) {
       const image = AssetsManager.get('TEXTURE_FOOD');
-      Food.frames = SpriteSheetUtils.getFrames(image, FOOD_SPRITE_COLUMNS, FOOD_SPRITE_ROWS);
+      Food._frames = new SpriteSheet(image, FOOD_SPRITE_COLUMNS, FOOD_SPRITE_ROWS).frames;
     }
 
-    return Food.frames;
+    return Food._frames;
   }
 }

@@ -1,22 +1,28 @@
+import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
 
-class SpriteSheetUtils {
-  public static getFrames(sheet: PIXI.Texture, columns: number, rows: number): PIXI.Texture[] {
+class SpriteSheet {
+  private _frames: PIXI.Texture[] = [];
+
+  constructor(sheet: PIXI.Texture, columns: number, rows: number) {
     const frameWidth = sheet.width / columns;
     const frameHeight = sheet.height / rows;
-    const frames: PIXI.Texture[] = [];
 
     for (let row = 0; row < rows; row++) {
       for (let column = 0; column < columns; column++) {
-        frames.push(new PIXI.Texture({
+        this._frames.push(new PIXI.Texture({
           source: sheet.source,
           frame: new PIXI.Rectangle(column * frameWidth, row * frameHeight, frameWidth, frameHeight),
         }));
       }
     }
 
-    return frames;
+    autoBind(this);
+  }
+
+  public get frames(): PIXI.Texture[] {
+    return this._frames;
   }
 }
 
-export default SpriteSheetUtils;
+export default SpriteSheet;
