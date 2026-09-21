@@ -10,11 +10,13 @@ import LevelManager from 'src/managers/LevelManager';
 import UIManager from 'src/managers/UIManager';
 import MainScene from 'src/scenes/MainScene';
 
+import LEVELS from './LEVELS';
+
 export default class Game {
   private readonly events = new PIXI.EventEmitter<GameEvents>();
   private readonly input = new InputManager();
   private readonly focus = new FocusManager(this.events);
-  private readonly levels = new LevelManager();
+  private readonly levels = new LevelManager(LEVELS);
   private readonly scene: Scene;
 
   private isGameOver = false;
