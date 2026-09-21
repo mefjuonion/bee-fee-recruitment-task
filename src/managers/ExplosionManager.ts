@@ -1,28 +1,26 @@
 import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
+import EntityPool from 'src/core/EntityPool';
 import FoodExplosion from 'src/prefabs/FoodExplosion';
 
 class ExplosionManager {
-  private readonly explosions: Set<FoodExplosion> = new Set();
+  private readonly explosions: EntityPool<FoodExplosion>;
 
-  constructor(private readonly app: PIXI.Application) {
+  constructor(app: PIXI.Application) {
+    this.explosions = new EntityPool(app.stage);
     autoBind(this);
   }
 
   public spawn(x: number, y: number): void {
-    const explosion = new FoodExplosion(x, y);
-
-    this.explosions.add(explosion);
-    this.app.stage.addChild(explosion.body);
+    this.explosions.add(new FoodExplosion(x, y));
   }
 
   public update(deltaSeconds: number): void {
-    for (const explosion of [...this.explosions]) {
+    for (const explosion of this.explosions.all) {
       explosion.update(deltaSeconds);
 
       if (explosion.isFinished) {
-        this.app.stage.removeChild(explosion.body);
-        this.explosions.delete(explosion);
+        this.explosions.remove(explosion);
       }
     }
   }

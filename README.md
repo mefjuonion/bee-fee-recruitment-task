@@ -38,6 +38,7 @@ src
 (**UPDATE**: jednak dodałem JSONA i wykorzystałem PIXI spritesheet)
 9. Zakładając rozgrywkę multiplayer możnaby się pokusić o dodanie do eventu zmiany punktów ID gracza i drobną edycję `FallingRewardsManager` by smakołyki były współdzielone. Nie jest to karkołomne zadanie, tym bardziej, że sprawdzanie kolizji odnosi się do konkretnych elementów między którymi kolizja zaszła, nie jest globalne, jednak znowu na ten moment YAGNI, daję tylko znać, że było to przemyślane.
 10. Na wypadek gdybyśmy chcieli w przyszłości przenieść grę na smartfony i na przykład bazować na żyroskopie, klasy, które odpowiadają za podawanie kierunku implementują `DirectionProvider`. Chyba jutro wyślę ten projekt, bo trochę się boję, że jak go zaraz nie skończę, to zrezygnuję ze snu, żeby wprowadzać ulepszenia. Stęskniłem się za tym uczuciem tbh xD
+11. Niektóre managery operują na `PIXI.container.stage`, stąd `EntityPool`, który pozwala zarządzać nie tylko samym setem na którym ma operować manager, ale i bezpośrednio elementami w grze. To na wypadek jakbyśmy chcieli w przyszłości dodać jakieś inne itemy do gierki.
 
 ### Tech stack
 - **TypeScript** - główny język projektu

@@ -1,6 +1,7 @@
 import autoBind from 'auto-bind';
 import throttle from 'lodash/throttle';
 import * as PIXI from 'pixi.js';
+import EntityPool from 'src/core/EntityPool';
 import FallingReward from 'src/core/FallingReward';
 import ExplosionManager from 'src/managers/ExplosionManager';
 import Food from 'src/prefabs/Food';
@@ -9,7 +10,7 @@ import ScoreLossZone from 'src/prefabs/ScoreLossZone';
 import EntityUtils from 'src/utils/EntityUtils';
 
 class FallingRewardsManager {
-  private readonly items: Set<FallingReward> = new Set();
+  private readonly items: EntityPool<FallingReward>;
   private readonly explosions: ExplosionManager;
   private spawnItem: () => void = () => {};
 
@@ -18,16 +19,17 @@ class FallingRewardsManager {
     private readonly player: Player,
     private readonly scoreLossZone: ScoreLossZone
   ) {
+    this.items = new EntityPool(app.stage);
     this.explosions = new ExplosionManager(app);
     autoBind(this);
   }
 
   public set spawnInterval(intervalMs: number) {
-    this.spawnItem = throttle(() => this.addItem(new Food(this.app.screen)), intervalMs);
+    this.spawnItem = throttle(() => this.items.add(new Food(this.app.screen)), intervalMs);
   }
 
   public resize(screen: PIXI.Rectangle): void {
-    for (const item of this.items) {
+    for (const item of this.items.all) {
       item.resize(screen);
     }
   }
@@ -35,29 +37,19 @@ class FallingRewardsManager {
   public update(deltaSeconds: number): void {
     this.spawnItem();
 
-    for (const item of [...this.items]) {
+    for (const item of this.items.all) {
       item.update(deltaSeconds);
 
       if (this.player.checkCollision(item, item.score)) {
         this.explosions.spawn(item.body.x, item.body.y);
-        this.removeItem(item);
+        this.items.remove(item);
       } else if (EntityUtils.intersects(this.scoreLossZone, item)) {
         this.player.score -= 1;
-        this.removeItem(item);
+        this.items.remove(item);
       }
     }
 
     this.explosions.update(deltaSeconds);
-  }
-
-  private addItem(item: FallingReward): void {
-    this.items.add(item);
-    this.app.stage.addChild(item.body);
-  }
-
-  private removeItem(item: FallingReward): void {
-    this.app.stage.removeChild(item.body);
-    this.items.delete(item);
   }
 }
 
