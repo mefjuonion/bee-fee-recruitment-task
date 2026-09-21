@@ -4,7 +4,7 @@ import * as PIXI from 'pixi.js';
 import { DirectionProvider } from 'src/core/DirectionProvider';
 import Entity from 'src/core/Entity';
 import { GameEvents, ScoreChangeReason } from 'src/core/events';
-import intersects from 'src/utils/intersects';
+import EntityUtils from 'src/utils/EntityUtils';
 
 export interface CharacterArgs {
     events: PIXI.EventEmitter<GameEvents>;
@@ -60,7 +60,7 @@ export default abstract class Character extends Entity {
   }
 
   public checkCollision(item: Entity, scoreValue: number): boolean {
-    if (!intersects(this, item)) {
+    if (!EntityUtils.intersects(this, item)) {
       return false;
     }
 

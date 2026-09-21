@@ -6,7 +6,7 @@ import ExplosionManager from 'src/managers/ExplosionManager';
 import Food from 'src/prefabs/Food';
 import Player from 'src/prefabs/Player';
 import ScoreLossZone from 'src/prefabs/ScoreLossZone';
-import intersects from 'src/utils/intersects';
+import EntityUtils from 'src/utils/EntityUtils';
 
 class FallingRewardsManager {
   private readonly items: Set<FallingReward> = new Set();
@@ -41,7 +41,7 @@ class FallingRewardsManager {
       if (this.player.checkCollision(item, item.score)) {
         this.explosions.spawn(item.body.x, item.body.y);
         this.removeItem(item);
-      } else if (intersects(this.scoreLossZone, item)) {
+      } else if (EntityUtils.intersects(this.scoreLossZone, item)) {
         this.player.score -= 1;
         this.removeItem(item);
       }

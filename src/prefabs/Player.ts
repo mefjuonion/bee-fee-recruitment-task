@@ -6,7 +6,7 @@ import { DirectionProvider } from 'src/core/DirectionProvider';
 import { Resizable } from 'src/core/Resizable';
 import AssetsManager from 'src/managers/AssetsManager';
 import SETTINGS from 'src/SETTINGS';
-import getRelativeSize from 'src/utils/getRelativeSize';
+import ScreenUtils from 'src/utils/ScreenUtils';
 
 export type PlayerBehavior =
     'idle' |
@@ -27,7 +27,7 @@ class Player extends Character implements Resizable {
 
   constructor(args: CharacterArgs) {
     const { screen } = args;
-    const size = getRelativeSize(screen, SETTINGS.playerSizeRatio);
+    const size = ScreenUtils.getRelativeSize(screen, SETTINGS.playerSizeRatio);
     const sheet = AssetsManager.getSpritesheet('TEXTURE_PLAYER');
 
     const body = new PIXI.AnimatedSprite(sheet.animations.idle);
@@ -65,7 +65,7 @@ class Player extends Character implements Resizable {
   }
 
   public resize(screen: PIXI.Rectangle): void {
-    const size = getRelativeSize(screen, SETTINGS.playerSizeRatio);
+    const size = ScreenUtils.getRelativeSize(screen, SETTINGS.playerSizeRatio);
 
     this.body.width = size;
     this.body.height = size;
