@@ -9,13 +9,6 @@ import vertexShader from 'src/shaders/level_1_background/level_1_background.vert
 import ScreenUtils from 'src/utils/ScreenUtils';
 import Transition from 'src/utils/Transition';
 
-function getTiledTexture(key: TextureAssetKey): PIXI.Texture {
-  const texture = AssetsManager.get(key);
-  texture.source.style.addressMode = 'repeat';
-
-  return texture;
-}
-
 export default class Background extends Entity implements Resizable {
   public readonly body: PIXI.Mesh<PIXI.MeshGeometry, PIXI.Shader>;
   private readonly shader: PIXI.Shader;
@@ -28,7 +21,7 @@ export default class Background extends Entity implements Resizable {
     super();
 
     this.textureTransition = new Transition(initialTextureKey, SETTINGS.levelTransitionDuration);
-    const texture = getTiledTexture(initialTextureKey);
+    const texture = this.getTiledTexture(initialTextureKey);
 
     this.terrainUniforms = new PIXI.UniformGroup({
       uScrollOffset: { value: 0, type: 'f32' },
@@ -58,10 +51,17 @@ export default class Background extends Entity implements Resizable {
     autoBind(this);
   }
 
+  private getTiledTexture(key: TextureAssetKey): PIXI.Texture {
+    const texture = AssetsManager.get(key);
+    texture.source.style.addressMode = 'repeat';
+
+    return texture;
+  }
+
   public transitionTo(nextTextureKey: TextureAssetKey): void {
     if (!this.textureTransition.start(nextTextureKey)) return;
 
-    const nextTexture = getTiledTexture(nextTextureKey);
+    const nextTexture = this.getTiledTexture(nextTextureKey);
     this.shader.resources.uNextTexture = nextTexture.source;
   }
 
