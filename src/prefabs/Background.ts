@@ -6,11 +6,8 @@ import AssetsManager, { TextureAssetKey } from 'src/managers/AssetsManager';
 import SETTINGS from 'src/SETTINGS';
 import fragmentShader from 'src/shaders/level_1_background/level_1_background.frag';
 import vertexShader from 'src/shaders/level_1_background/level_1_background.vert';
+import ScreenUtils from 'src/utils/ScreenUtils';
 import Transition from 'src/utils/Transition';
-
-function buildQuadPositions(screen: PIXI.Rectangle): Float32Array {
-  return new Float32Array([0, 0, screen.width, 0, screen.width, screen.height, 0, screen.height]);
-}
 
 function getTiledTexture(key: TextureAssetKey): PIXI.Texture {
   const texture = AssetsManager.get(key);
@@ -54,7 +51,7 @@ export default class Background extends Entity implements Resizable {
       },
     });
 
-    const geometry = new PIXI.MeshGeometry({ positions: buildQuadPositions(screen) });
+    const geometry = new PIXI.MeshGeometry({ positions: ScreenUtils.getQuadPositions(screen) });
 
     this.body = new PIXI.Mesh({ geometry, shader: this.shader });
 
@@ -83,7 +80,7 @@ export default class Background extends Entity implements Resizable {
   }
 
   public resize(screen: PIXI.Rectangle): void {
-    this.body.geometry.positions.set(buildQuadPositions(screen));
+    this.body.geometry.positions.set(ScreenUtils.getQuadPositions(screen));
     this.body.geometry.getBuffer('aPosition').update();
   }
 }

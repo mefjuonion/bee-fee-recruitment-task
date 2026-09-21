@@ -6,6 +6,10 @@ class ScreenUtils {
     return Math.min(screen.width, screen.height) * ratio;
   }
 
+  public static getQuadPositions(screen: PIXI.Rectangle): Float32Array {
+    return new Float32Array([0, 0, screen.width, 0, screen.width, screen.height, 0, screen.height]);
+  }
+
   public static getRelativePosition(props: {
     position: Coordinates2D,
     previousScreen: PIXI.Rectangle,
