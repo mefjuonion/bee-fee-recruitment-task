@@ -1,28 +1,21 @@
 import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
 import { GameEvents, ScoreChange } from 'src/core/events';
+import { Scene } from 'src/core/Scene';
 import AssetsManager from 'src/managers/AssetsManager';
 import AudioManager from 'src/managers/AudioManager';
-import FallingRewardsManager from 'src/managers/FallingRewardsManager';
 import FocusManager from 'src/managers/FocusManager';
 import InputManager from 'src/managers/InputManager';
 import LevelManager from 'src/managers/LevelManager';
 import UIManager from 'src/managers/UIManager';
-import Background from 'src/prefabs/Background';
-import DamageFlash from 'src/prefabs/DamageFlash';
-import Player from 'src/prefabs/Player';
-import ScoreLossZone from 'src/prefabs/ScoreLossZone';
+import MainScene from 'src/scenes/MainScene';
 
 export default class Game {
   private readonly events = new PIXI.EventEmitter<GameEvents>();
   private readonly input = new InputManager();
   private readonly focus = new FocusManager(this.events);
   private readonly levels = new LevelManager();
-  private readonly damageFlash = new DamageFlash();
-  private readonly background: Background;
-  private readonly player: Player;
-  private readonly scoreLossZone: ScoreLossZone;
-  private readonly fallingRewards: FallingRewardsManager;
+  private readonly scene: Scene;
 
   private isGameOver = false;
   private isPaused = false;
@@ -31,20 +24,7 @@ export default class Game {
   constructor(private readonly app: PIXI.Application) {
     autoBind(this);
 
-    this.player = new Player({
-      events: this.events,
-      screen: this.app.screen,
-      speed: this.levels.current.playerSpeed,
-      startingScore: this.levels.current.startingScore,
-    });
-
-    this.background = new Background(this.app.screen, this.levels.current.backgroundTexture);
-    this.scoreLossZone = new ScoreLossZone(this.app.screen);
-    this.fallingRewards = new FallingRewardsManager(this.app, this.player, this.scoreLossZone);
-    this.fallingRewards.spawnInterval = this.levels.current.spawnFoodInterval;
-
-    this.app.stage.addChild(this.background.body, this.scoreLossZone.body, this.player.body);
-    this.app.stage.filters = [this.damageFlash.filter];
+    this.scene = new MainScene(this.app, this.events, this.levels.current);
 
     this.registerEvents();
 
@@ -53,10 +33,6 @@ export default class Game {
   }
 
   private handleScoreChanged(change: ScoreChange): void {
-    if (change.current < change.previous) {
-      this.damageFlash.trigger();
-    }
-
     if (this.isPaused || change.current < this.levels.current.scoreToAdvance) return;
 
     this.isPaused = true;
@@ -71,18 +47,13 @@ export default class Game {
   private handleContinueLevel(): void {
     this.levels.advance();
 
-    this.player.speed = this.levels.current.playerSpeed;
-    this.fallingRewards.spawnInterval = this.levels.current.spawnFoodInterval;
-    this.background.transitionTo(this.levels.current.backgroundTexture);
+    this.scene.setLevel(this.levels.current);
     this.isPaused = false;
     this.events.emit('levelChanged', this.levels.current.name);
   }
 
   private handleResize(): void {
-    this.background.resize(this.app.screen);
-    this.scoreLossZone.resize(this.app.screen);
-    this.player.resize(this.app.screen);
-    this.fallingRewards.resize(this.app.screen);
+    this.scene.resize(this.app.screen);
   }
 
   private handleWindowFocusChanged(isFocused: boolean): void {
@@ -96,10 +67,7 @@ export default class Game {
 
     const deltaSeconds = ticker.deltaMS / 1000;
 
-    this.background.update(deltaSeconds);
-    this.player.update(deltaSeconds, this.input);
-    this.fallingRewards.update(deltaSeconds);
-    this.damageFlash.update(deltaSeconds);
+    this.scene.update(deltaSeconds, this.input);
   };
 
   private registerEvents(): void {

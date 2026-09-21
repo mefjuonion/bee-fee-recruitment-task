@@ -22,9 +22,11 @@ src
 -> managers: koordynują zadania, interakcje, reakacje i flow poszczególnych funkcjonalności
 -> prefabs: gotowe elementy do umieszczenia w grze
 -> shaders: shadery. Głównie wepchnąłem tam zmianę tekstury sceny opartą na fractional brownian noise i jakieś tam drobne upiększacze (a przynajmniej mam nadzieję, że upiększacze, designer miałby pewnie inne zdanie)
+-> scenes: sceny, kontenery na wszystko co widać.
 -> types, utlis: typy i narzędzia
 ```
 
+0. `Game.ts` kontroluje flow gry, spina zaleności, reaguje na eventy.
 1. Teoretycznie przy tak prostej grze możnaby trzymać punktację w storze projektu, ale ze względu na `wzięcie pod uwagę, że gra może być w przyszłości rozwijana` uznałem, że potencjalnie możemy rozważać multiplayer w przyszłości, a wówczas nadawanie cech poszczególnym graczom będzie konieczne.
 2. Wyżej w projekcie mamy pluginy, chciałem postawić projekt na vite a ten ma problemy z pragmą (narzędziem do importu glsl w plikach glsl), to samo zrobiłem w projekcie omawianym wcześniej, jedyny dostępny plugin niestety nawala.
 3. Dane na temat obecnego levelu mamy w `LevelManager`, dodanie nowego to dosłownie ctrl+c, ctrl+v i dostosowanie parametrów.
