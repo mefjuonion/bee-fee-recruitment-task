@@ -1,4 +1,4 @@
-const UI = {
+const DOM = {
   welcomePage: () => document.getElementById('welcome-page') as HTMLDivElement,
   welcomeStartButton: () => document.getElementById('welcome-start-button') as HTMLButtonElement,
   score: () => document.getElementById('score') as HTMLSpanElement,
@@ -14,4 +14,4 @@ const UI = {
   gameWonRestart: () => document.getElementById('game-won-restart') as HTMLButtonElement,
 };
 
-export default UI;
+export default DOM;

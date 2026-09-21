@@ -1,9 +1,9 @@
 import App from './App';
-import UI from './utils/UI';
+import DOM from './utils/DOM';
 
 const whenStarted = new Promise<void>((resolve) => {
-  UI.welcomeStartButton().addEventListener('click', () => {
-    UI.welcomePage().remove();
+  DOM.welcomeStartButton().addEventListener('click', () => {
+    DOM.welcomePage().remove();
     resolve();
   });
 });

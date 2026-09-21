@@ -4,10 +4,10 @@ import { GameEvents, ScoreChange } from 'src/core/events';
 import { Scene } from 'src/core/Scene';
 import AssetsManager from 'src/managers/AssetsManager';
 import AudioManager from 'src/managers/AudioManager';
+import DOMManager from 'src/managers/DOMManager';
 import FocusManager from 'src/managers/FocusManager';
 import InputManager from 'src/managers/InputManager';
 import LevelManager from 'src/managers/LevelManager';
-import UIManager from 'src/managers/UIManager';
 import MainScene from 'src/scenes/MainScene';
 
 import LEVELS from './LEVELS';
@@ -78,7 +78,7 @@ export default class Game {
     this.events.on('scoreChanged', this.handleScoreChanged);
     this.events.on('continueLevel', this.handleContinueLevel);
     this.events.on('windowFocusChanged', this.handleWindowFocusChanged);
-    new UIManager(this.events);
+    new DOMManager(this.events);
     new AudioManager(this.events);
   }
 
