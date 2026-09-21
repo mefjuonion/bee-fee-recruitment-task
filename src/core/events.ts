@@ -8,6 +8,7 @@ export interface ScoreChange {
 
 export interface GameEvents {
     scoreChanged: [change: ScoreChange];
+    playerDamaged: [];
     levelChanged: [levelName: string];
     levelComplete: [levelName: string];
     continueLevel: [];

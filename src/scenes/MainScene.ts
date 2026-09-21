@@ -1,7 +1,7 @@
 import autoBind from 'auto-bind';
 import * as PIXI from 'pixi.js';
 import { DirectionProvider } from 'src/core/DirectionProvider';
-import { GameEvents, ScoreChange } from 'src/core/events';
+import { GameEvents } from 'src/core/events';
 import Level from 'src/core/Level';
 import { Scene } from 'src/core/Scene';
 import FallingRewardsManager from 'src/managers/FallingRewardsManager';
@@ -36,7 +36,7 @@ export default class MainScene implements Scene {
     app.stage.addChild(this.background.body, this.scoreLossZone.body, this.player.body);
     app.stage.filters = [this.damageFlash.filter];
 
-    events.on('scoreChanged', this.handleScoreChanged);
+    events.on('playerDamaged', this.handlePlayerDamaged);
   }
 
   public setLevel(level: Level): void {
@@ -60,8 +60,7 @@ export default class MainScene implements Scene {
     this.fallingRewards.resize(screen);
   }
 
-  private handleScoreChanged(change: ScoreChange): void {
-    if (change.reason === 'levelReset' || change.current >= change.previous) return;
+  private handlePlayerDamaged(): void {
     this.damageFlash.trigger();
   }
 }

@@ -78,6 +78,10 @@ export default abstract class Character extends Entity {
     this._score = clamp(value, 0, Infinity);
     this.characterArgs.events.emit('scoreChanged', { previous: previousScore, current: this._score, reason });
 
+    if (reason === 'gameplay' && this._score < previousScore) {
+      this.characterArgs.events.emit('playerDamaged');
+    }
+
     if (!this.isAlive()) {
       this.characterArgs.events.emit('gameOver');
     }

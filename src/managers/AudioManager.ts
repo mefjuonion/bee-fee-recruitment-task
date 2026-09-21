@@ -35,13 +35,13 @@ class AudioManager {
   }
 
   private handleScoreChanged(change: ScoreChange): void {
-    if (change.reason !== 'gameplay') return;
-
-    if (change.current > change.previous) {
+    if (change.reason === 'gameplay' && change.current > change.previous) {
       this.soundLibrary.SOUND_EATING.play();
-    } else if (change.current < change.previous) {
-      this.soundLibrary.SOUND_ERROR.play();
     }
+  }
+
+  private handlePlayerDamaged(): void {
+    this.soundLibrary.SOUND_ERROR.play();
   }
 
   private handleGameOver(): void {
@@ -63,6 +63,7 @@ class AudioManager {
 
   private registerEventListeners(): void {
     this.events.on('scoreChanged', this.handleScoreChanged);
+    this.events.on('playerDamaged', this.handlePlayerDamaged);
     this.events.on('gameOver', this.handleGameOver);
     this.events.on('gameWon', this.handleGameWon);
     this.events.on('levelComplete', this.handleLevelComplete);
