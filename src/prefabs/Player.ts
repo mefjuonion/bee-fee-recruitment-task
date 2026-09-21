@@ -1,5 +1,4 @@
 import autoBind from 'auto-bind';
-import { clamp } from 'lodash';
 import * as PIXI from 'pixi.js';
 import Character, { CharacterArgs } from 'src/core/Character';
 import { DirectionProvider } from 'src/core/DirectionProvider';
@@ -24,6 +23,7 @@ class Player extends Character implements Resizable {
   private readonly sheet: PIXI.Spritesheet;
 
   private playerBehavior: PlayerBehavior = 'idle';
+  private screen: PIXI.Rectangle;
 
   constructor(args: CharacterArgs) {
     const { screen } = args;
@@ -42,6 +42,7 @@ class Player extends Character implements Resizable {
     super(args, body);
 
     this.sheet = sheet;
+    this.screen = screen.clone();
 
     autoBind(this);
   }
@@ -66,11 +67,19 @@ class Player extends Character implements Resizable {
 
   public resize(screen: PIXI.Rectangle): void {
     const size = ScreenUtils.getRelativeSize(screen, SETTINGS.playerSizeRatio);
+    const position = ScreenUtils.getRelativePosition({
+      position: { x: this.body.x, y: this.body.y },
+      previousScreen: this.screen,
+      nextScreen: screen,
+      elementSize: size,
+    });
 
     this.body.width = size;
     this.body.height = size;
-    this.body.x = clamp(this.body.x, size / 2, screen.width - size / 2);
+    this.body.x = position.x;
     this.body.y = screen.height - size;
+
+    this.screen = screen.clone();
   }
 }
 

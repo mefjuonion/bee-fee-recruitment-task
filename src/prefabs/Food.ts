@@ -11,6 +11,8 @@ const FOOD_SPRITE_COLUMNS = 8;
 const FOOD_SPRITE_ROWS = 8;
 
 export default class Food extends FallingReward {
+  private screen: PIXI.Rectangle;
+
   constructor(screen: PIXI.Rectangle) {
     const image = AssetsManager.get('TEXTURE_FOOD');
     const frames = SpriteSheetUtils.getFrames(image, FOOD_SPRITE_COLUMNS, FOOD_SPRITE_ROWS);
@@ -25,13 +27,25 @@ export default class Food extends FallingReward {
     body.y = -size;
     super(body, 1);
 
+    this.screen = screen.clone();
+
     autoBind(this);
   }
 
   public resize(screen: PIXI.Rectangle): void {
     const size = ScreenUtils.getRelativeSize(screen, SETTINGS.itemSizeRatio);
+    const position = ScreenUtils.getRelativePosition({
+      position: { x: this.body.x, y: this.body.y },
+      previousScreen: this.screen,
+      nextScreen: screen,
+      elementSize: size,
+    });
 
     this.body.width = size;
     this.body.height = size;
+    this.body.x = position.x;
+    this.body.y = position.y;
+
+    this.screen = screen.clone();
   }
 }
