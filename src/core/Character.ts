@@ -3,7 +3,7 @@ import { clamp } from 'lodash';
 import * as PIXI from 'pixi.js';
 import { DirectionProvider } from 'src/core/DirectionProvider';
 import Entity from 'src/core/Entity';
-import { GameEvents } from 'src/core/events';
+import { GameEvents, ScoreChangeReason } from 'src/core/events';
 import intersects from 'src/utils/intersects';
 
 export interface CharacterArgs {
@@ -33,14 +33,11 @@ export default abstract class Character extends Entity {
   }
 
   public set score(value: number) {
-    const previousScore = this._score;
+    this.applyScore(value, 'gameplay');
+  }
 
-    this._score = clamp(value, 0, Infinity);
-    this.characterArgs.events.emit('scoreChanged', { previous: previousScore, current: this._score });
-
-    if (!this.isAlive()) {
-      this.characterArgs.events.emit('gameOver');
-    }
+  public resetScore(value: number): void {
+    this.applyScore(value, 'levelReset');
   }
 
   public set speed(value: number) {
@@ -73,5 +70,16 @@ export default abstract class Character extends Entity {
 
   public isAlive(): boolean {
     return this._score > 0;
+  }
+
+  private applyScore(value: number, reason: ScoreChangeReason): void {
+    const previousScore = this._score;
+
+    this._score = clamp(value, 0, Infinity);
+    this.characterArgs.events.emit('scoreChanged', { previous: previousScore, current: this._score, reason });
+
+    if (!this.isAlive()) {
+      this.characterArgs.events.emit('gameOver');
+    }
   }
 }

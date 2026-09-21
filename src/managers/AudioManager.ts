@@ -35,6 +35,8 @@ class AudioManager {
   }
 
   private handleScoreChanged(change: ScoreChange): void {
+    if (change.reason !== 'gameplay') return;
+
     if (change.current > change.previous) {
       this.soundLibrary.SOUND_EATING.play();
     } else if (change.current < change.previous) {

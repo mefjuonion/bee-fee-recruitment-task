@@ -41,6 +41,7 @@ export default class MainScene implements Scene {
 
   public setLevel(level: Level): void {
     this.player.speed = level.playerSpeed;
+    this.player.resetScore(level.startingScore);
     this.fallingRewards.spawnInterval = level.spawnFoodInterval;
     this.background.transitionTo(level.backgroundTexture);
   }
@@ -60,8 +61,7 @@ export default class MainScene implements Scene {
   }
 
   private handleScoreChanged(change: ScoreChange): void {
-    if (change.current < change.previous) {
-      this.damageFlash.trigger();
-    }
+    if (change.reason === 'levelReset' || change.current >= change.previous) return;
+    this.damageFlash.trigger();
   }
 }

@@ -1,6 +1,9 @@
+export type ScoreChangeReason = 'gameplay' | 'levelReset';
+
 export interface ScoreChange {
     previous: number;
     current: number;
+    reason: ScoreChangeReason;
 }
 
 export interface GameEvents {
