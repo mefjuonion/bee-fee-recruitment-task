@@ -5,10 +5,10 @@ export type TextureAssetKey = keyof typeof TEXTURE_ASSETS;
 type Asset = PIXI.Texture | PIXI.Spritesheet;
 
 export const TEXTURE_ASSETS = {
-  TEXTURE_PLAYER: '/images/player/texture.json',
-  TEXTURE_FOOD: '/images/food/texture.json',
-  TEXTURE_BACKGROUND_LEVEL_1: '/images/backgrounds/level_1/rocky_terrain_02_diff_4k.jpg',
-  TEXTURE_BACKGROUND_LEVEL_2: '/images/backgrounds/level_2/snow_02_diff_1k.jpg'
+  TEXTURE_PLAYER: '/images/spritesheets/player/texture.json',
+  TEXTURE_FOOD: '/images/spritesheets/food/texture.json',
+  TEXTURE_BACKGROUND_LEVEL_1: '/images/textures/backgrounds/level_1/rocky_terrain_02_diff_4k.jpg',
+  TEXTURE_BACKGROUND_LEVEL_2: '/images/textures/backgrounds/level_2/snow_02_diff_1k.jpg'
 };
 
 export const AUDIO_ASSETS = {
