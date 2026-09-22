@@ -52,7 +52,7 @@ export default class Background extends Entity implements Resizable {
   }
 
   private getTiledTexture(key: TextureAssetKey): PIXI.Texture {
-    const texture = AssetsManager.get(key);
+    const texture = AssetsManager.getTexture(key);
     texture.source.style.addressMode = 'repeat';
 
     return texture;

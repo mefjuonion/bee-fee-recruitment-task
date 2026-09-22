@@ -62,7 +62,7 @@ class AssetsManager {
     return this.loadProgress;
   }
 
-  public static get(key: TextureAssetKey): PIXI.Texture {
+  public static getTexture(key: TextureAssetKey): PIXI.Texture {
     return this.getAsset(key) as PIXI.Texture;
   }
 
