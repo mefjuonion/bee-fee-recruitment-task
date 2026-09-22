@@ -1,29 +1,29 @@
-const SETTINGS = {
-  playerSizeRatio: 0.25,
-  itemSizeRatio: 0.06,
-  backgroundColor: 0x1e272e,
-  scoreItemFallSpeed: 100,
-  playerAnimationSpeed: 0.15,
+class SETTINGS {
+  public static readonly playerSizeRatio = 0.25;
+  public static readonly itemSizeRatio = 0.06;
+  public static readonly backgroundColor = 0x1e272e;
+  public static readonly scoreItemFallSpeed = 100;
+  public static readonly playerAnimationSpeed = 0.15;
 
-  scoreLossZoneHeight: 12,
+  public static readonly scoreLossZoneHeight = 12;
 
-  backgroundTileSize: 512,
-  backgroundNoiseFrequency: 0.004,
-  backgroundSwaySpeed: 0.3,
-  backgroundSwayAmount: 85.0,
-  levelTransitionDuration: 3,
+  public static readonly backgroundTileSize = 512;
+  public static readonly backgroundNoiseFrequency = 0.004;
+  public static readonly backgroundSwaySpeed = 0.3;
+  public static readonly backgroundSwayAmount = 85.0;
+  public static readonly levelTransitionDuration = 3;
 
-  explosionParticleCount: 40,
-  explosionParticleSize: 3,
-  explosionMinSpeed: 80,
-  explosionMaxSpeed: 220,
-  explosionDuration: 0.5,
-  explosionColors: [0xffe066, 0xff922b, 0xffffff, 0xff6b6b],
+  public static readonly explosionParticleCount = 40;
+  public static readonly explosionParticleSize = 3;
+  public static readonly explosionMinSpeed = 80;
+  public static readonly explosionMaxSpeed = 220;
+  public static readonly explosionDuration = 0.5;
+  public static readonly explosionColors = [0xffe066, 0xff922b, 0xffffff, 0xff6b6b];
 
-  backgroundMusicVolume: 0.4,
+  public static readonly backgroundMusicVolume = 0.4;
 
-  damageFlashDuration: 0.4,
-  damageFlashIntensity: 0.5,
-};
+  public static readonly damageFlashDuration = 0.4;
+  public static readonly damageFlashIntensity = 0.5;
+}
 
 export default SETTINGS;

@@ -29,16 +29,27 @@ class AssetsManager {
     const urls = Object.values(TEXTURE_ASSETS);
 
     const audioKeys = Object.keys(AUDIO_ASSETS) as Sound[];
+    const totalCount = keys.length + audioKeys.length;
+
+    let textureProgress = 0;
+    let audioCompletedCount = 0;
+
+    const updateProgress = (): void => {
+      this.loadProgress = (textureProgress * keys.length + audioCompletedCount) / totalCount;
+    };
 
     const [loaded] = await Promise.all([
       PIXI.Assets.load(urls, (progress) => {
-        this.loadProgress = progress;
+        textureProgress = progress;
+        updateProgress();
       }),
       Promise.all(audioKeys.map(async (key) => {
         const response = await fetch(AUDIO_ASSETS[key]);
         const blob = await response.blob();
 
         this.audioBlobUrls[key] = URL.createObjectURL(blob);
+        audioCompletedCount += 1;
+        updateProgress();
       }))
     ]);
 
